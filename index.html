@@ -9,76 +9,122 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#0c0b0a;--surface:#151412;--surface2:#1c1a17;--border:#2c2820;--text:#ede8e0;--muted:#7a7268;--accent:#e8e0d0;--paper:#1a1814;--warm:#2a2520;--danger:#c0392b}
 body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min-height:100vh}
-
-/* PAGE SYSTEM */
-.page{display:none}
-.page.on{display:block}
-#pg-login.on{display:flex;min-height:100vh;align-items:center;justify-content:center}
-#pg-admin.on{display:flex;min-height:100vh}
+.page{display:none}.page.on{display:block}
+#pg-login.on,#pg-register.on{display:flex;min-height:100vh;align-items:center;justify-content:center}
+#pg-dashboard.on{display:flex;min-height:100vh}
 
 /* NAV */
-.pub-nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:50}
-.pub-nav-logo{font-style:italic;font-size:1.25rem;color:var(--accent);cursor:pointer;border:none;background:transparent;font-family:'Lora',serif}
-.btn-login-nav{font-family:'Inter',sans-serif;font-size:.78rem;color:var(--muted);cursor:pointer;border:1px solid var(--border);background:transparent;padding:.3rem .85rem;border-radius:4px;transition:all .2s}
-.btn-login-nav:hover{color:var(--text);border-color:var(--muted)}
+.nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:50}
+.nav-logo{font-style:italic;font-size:1.25rem;color:var(--accent);cursor:pointer;border:none;background:transparent;font-family:'Lora',serif}
+.nav-right{display:flex;align-items:center;gap:.75rem}
+.nav-search{position:relative}
+.nav-search input{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:.4rem 1rem .4rem 2rem;border-radius:20px;font-size:.8rem;font-family:'Inter',sans-serif;outline:none;width:200px;transition:all .2s}
+.nav-search input:focus{border-color:var(--muted);width:240px}
+.nav-search input::placeholder{color:var(--muted)}
+.nav-search svg{position:absolute;left:.65rem;top:50%;transform:translateY(-50%);color:var(--muted)}
+.nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;overflow:hidden;flex-shrink:0}
+.nav-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.notif-btn{position:relative;background:transparent;border:none;cursor:pointer;color:var(--muted);display:flex;align-items:center;padding:.3rem;transition:color .2s}
+.notif-btn:hover{color:var(--text)}
+.notif-badge{position:absolute;top:0;right:0;width:8px;height:8px;border-radius:50%;background:var(--danger);display:none}
+.notif-badge.on{display:block}
 
-/* PUBLIC */
-.pub-wrap{max-width:780px;margin:0 auto;padding:2.5rem 1.5rem}
-.profile-sec{display:flex;align-items:center;gap:1.5rem;margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
-.p-avatar{width:72px;height:72px;border-radius:50%;border:2px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:var(--muted);flex-shrink:0;overflow:hidden}
-.p-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.p-info h1{font-size:1.6rem;font-style:italic;color:var(--accent);margin-bottom:.3rem}
-.p-info p{color:var(--muted);font-family:'Inter',sans-serif;font-size:.85rem;line-height:1.6}
-.p-stats{font-family:'Inter',sans-serif;font-size:.75rem;color:var(--muted);margin-top:.4rem}
-.pub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem}
-.pub-card{background:var(--paper);border:1px solid var(--border);border-radius:3px;padding:1.4rem;cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s;position:relative}
-.pub-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--muted),transparent)}
-.pub-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.5);border-color:var(--muted)}
-.pub-card-title{font-size:1rem;font-weight:600;color:var(--accent);margin-bottom:.5rem;line-height:1.35}
-.pub-card-excerpt{color:var(--muted);font-size:.8rem;font-family:'Inter',sans-serif;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:.85rem}
-.pub-card-meta{display:flex;align-items:center;justify-content:space-between;font-family:'Inter',sans-serif;font-size:.72rem;color:var(--muted);border-top:1px solid var(--border);padding-top:.7rem}
-.tag{background:var(--surface2);border:1px solid var(--border);padding:.12rem .45rem;border-radius:10px;font-size:.68rem;color:var(--muted)}
-.pub-tags{display:flex;gap:.3rem;flex-wrap:wrap}
-.empty-pub{text-align:center;padding:4rem 1rem;color:var(--muted);font-family:'Inter',sans-serif;grid-column:1/-1}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem 1.1rem;border-radius:4px;border:none;cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s;font-family:'Inter',sans-serif}
+.btn-p{background:var(--accent);color:#0c0b0a}.btn-p:hover{background:#fff}
+.btn-g{background:transparent;color:var(--muted);border:1px solid var(--border)}.btn-g:hover{color:var(--text);border-color:var(--muted)}
+.btn-d{background:transparent;color:var(--danger);border:1px solid transparent}.btn-d:hover{background:#1f0d0b;border-color:var(--danger)}
+.btn-follow{background:var(--accent);color:#0c0b0a;border:none;padding:.35rem .9rem;border-radius:4px;font-size:.78rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
+.btn-follow:hover{background:#fff}
+.btn-follow.following{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-follow.following:hover{color:var(--danger);border-color:var(--danger)}
+.btn-sm{padding:.3rem .7rem;font-size:.78rem}
+
+/* AUTH PAGES */
+.auth-box{width:100%;max-width:380px;padding:1.5rem}
+.auth-logo{font-size:2rem;font-style:italic;color:var(--accent);text-align:center;margin-bottom:.3rem}
+.auth-sub{text-align:center;color:var(--muted);font-family:'Inter',sans-serif;font-size:.82rem;margin-bottom:2rem}
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:2rem}
+.field{margin-bottom:1rem}
+.field label{display:block;font-family:'Inter',sans-serif;font-size:.75rem;color:var(--muted);margin-bottom:.4rem}
+.field input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:.6rem .85rem;border-radius:5px;font-size:.88rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s}
+.field input:focus{border-color:var(--muted)}
+.field input::placeholder{color:#3a3530}
+.auth-err{background:#1f0d0b;border:1px solid var(--danger);color:#e07070;font-family:'Inter',sans-serif;font-size:.8rem;padding:.6rem .85rem;border-radius:5px;margin-bottom:1rem;display:none}
+.auth-btn{width:100%;padding:.7rem;background:var(--accent);color:#0c0b0a;border:none;border-radius:5px;font-size:.88rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:background .2s;margin-top:.5rem}
+.auth-btn:hover{background:#fff}
+.auth-btn:disabled{opacity:.5;cursor:not-allowed}
+.auth-switch{text-align:center;margin-top:1.25rem;font-family:'Inter',sans-serif;font-size:.8rem;color:var(--muted)}
+.auth-switch a{color:var(--accent);cursor:pointer;text-decoration:underline}
+
+/* HOME FEED */
+.feed-wrap{max-width:680px;margin:0 auto;padding:2rem 1.5rem}
+.feed-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:2rem}
+.feed-tab{padding:.6rem 1.25rem;font-family:'Inter',sans-serif;font-size:.82rem;color:var(--muted);cursor:pointer;border:none;background:transparent;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.feed-tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+.post-card{background:var(--paper);border:1px solid var(--border);border-radius:4px;padding:1.5rem;margin-bottom:1.25rem;cursor:pointer;transition:border-color .2s,transform .15s}
+.post-card:hover{border-color:var(--muted);transform:translateY(-1px)}
+.post-card-author{display:flex;align-items:center;gap:.6rem;margin-bottom:.85rem}
+.author-av{width:28px;height:28px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0}
+.author-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.author-name{font-family:'Inter',sans-serif;font-size:.8rem;color:var(--muted)}
+.author-name strong{color:var(--text);font-weight:500}
+.post-title{font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:.5rem;line-height:1.35}
+.post-excerpt{color:var(--muted);font-size:.82rem;font-family:'Inter',sans-serif;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:.85rem}
+.post-meta{display:flex;align-items:center;gap:.6rem;font-family:'Inter',sans-serif;font-size:.72rem;color:var(--muted)}
+.post-tag{background:var(--surface2);border:1px solid var(--border);padding:.12rem .45rem;border-radius:10px;font-size:.68rem}
+.empty-feed{text-align:center;padding:4rem 1rem;color:var(--muted);font-family:'Inter',sans-serif}
+.empty-feed p{font-size:.88rem;line-height:1.6;margin-top:.5rem}
+
+/* SEARCH RESULTS */
+.search-wrap{max-width:680px;margin:0 auto;padding:2rem 1.5rem}
+.search-section-title{font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:1rem}
+.user-row{display:flex;align-items:center;gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--border)}
+.user-row:last-child{border-bottom:none}
+.user-row-av{width:40px;height:40px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;cursor:pointer}
+.user-row-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.user-row-info{flex:1;cursor:pointer}
+.user-row-name{font-size:.88rem;font-weight:600;color:var(--text)}
+.user-row-username{font-family:'Inter',sans-serif;font-size:.75rem;color:var(--muted)}
+.user-row-bio{font-family:'Inter',sans-serif;font-size:.78rem;color:var(--muted);margin-top:.15rem}
+
+/* PROFILE PAGE */
+.profile-wrap{max-width:680px;margin:0 auto;padding:2rem 1.5rem}
+.profile-header{display:flex;align-items:flex-start;gap:1.5rem;margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.profile-av-lg{width:80px;height:80px;border-radius:50%;background:var(--surface2);border:2px solid var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0}
+.profile-av-lg img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.profile-info-right{flex:1}
+.profile-info-right h1{font-size:1.4rem;font-style:italic;color:var(--accent);margin-bottom:.15rem}
+.profile-username{font-family:'Inter',sans-serif;font-size:.82rem;color:var(--muted);margin-bottom:.5rem}
+.profile-bio{font-family:'Inter',sans-serif;font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem}
+.profile-stats-row{display:flex;gap:1.5rem;font-family:'Inter',sans-serif;font-size:.78rem;color:var(--muted)}
+.profile-stats-row strong{color:var(--text)}
+.profile-actions{display:flex;gap:.5rem;margin-top:.75rem}
 
 /* ARTICLE */
 .art-wrap{max-width:660px;margin:0 auto;padding:2.5rem 1.5rem}
-.art-back{color:var(--muted);font-family:'Inter',sans-serif;font-size:.82rem;cursor:pointer;background:transparent;border:none;display:inline-flex;align-items:center;gap:.4rem;margin-bottom:2.5rem;transition:color .2s}
+.art-back{color:var(--muted);font-family:'Inter',sans-serif;font-size:.82rem;cursor:pointer;background:transparent;border:none;display:inline-flex;align-items:center;gap:.4rem;margin-bottom:2rem;transition:color .2s}
 .art-back:hover{color:var(--text)}
+.art-author-row{display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;cursor:pointer}
+.art-author-av{width:36px;height:36px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.art-author-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.art-author-info{font-family:'Inter',sans-serif}
+.art-author-name{font-size:.85rem;font-weight:500;color:var(--text)}
+.art-author-meta{font-size:.75rem;color:var(--muted)}
 .art-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
 .art-tag{font-family:'Inter',sans-serif;font-size:.72rem;color:var(--muted);border:1px solid var(--border);padding:.2rem .55rem;border-radius:10px}
-.art-title{font-size:2.1rem;font-weight:600;font-style:italic;color:var(--accent);line-height:1.25;margin-bottom:1rem}
-.art-meta{display:flex;align-items:center;gap:.75rem;font-family:'Inter',sans-serif;font-size:.78rem;color:var(--muted);padding-bottom:1.5rem;border-bottom:1px solid var(--border);margin-bottom:2rem}
+.art-title{font-size:2.1rem;font-weight:600;font-style:italic;color:var(--accent);line-height:1.25;margin-bottom:1.5rem}
 .art-body{font-size:1.05rem;line-height:1.95;color:#d8d0c8}
 .art-body h1,.art-body h2,.art-body h3{font-family:'Lora',serif;color:var(--accent);margin:2rem 0 .75rem}
 .art-body p{margin-bottom:1rem}
 .art-body ul,.art-body ol{padding-left:1.5rem;margin:1rem 0}
 .art-body blockquote{border-left:2px solid var(--muted);padding-left:1.25rem;margin:1.5rem 0;color:var(--muted);font-style:italic}
 .art-body code{background:var(--surface2);padding:.15rem .4rem;border-radius:3px;font-family:monospace;font-size:.88em}
-.art-footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);text-align:center;font-family:'Inter',sans-serif;font-size:.82rem;color:var(--muted)}
-.art-back-btn{margin-top:.85rem;background:transparent;border:1px solid var(--border);color:var(--muted);padding:.45rem 1.1rem;border-radius:4px;font-family:'Inter',sans-serif;font-size:.82rem;cursor:pointer;transition:all .2s}
-.art-back-btn:hover{border-color:var(--muted);color:var(--text)}
+.art-footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:1rem}
 
-/* LOGIN */
-.login-box{width:100%;max-width:380px;padding:1.5rem}
-.login-logo{font-size:2rem;font-style:italic;color:var(--accent);text-align:center;margin-bottom:.3rem}
-.login-sub{text-align:center;color:var(--muted);font-family:'Inter',sans-serif;font-size:.82rem;margin-bottom:2rem}
-.login-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:2rem}
-.field{margin-bottom:1rem}
-.field label{display:block;font-family:'Inter',sans-serif;font-size:.75rem;color:var(--muted);margin-bottom:.4rem}
-.field input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:.6rem .85rem;border-radius:5px;font-size:.88rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s}
-.field input:focus{border-color:var(--muted)}
-.field input::placeholder{color:#3a3530}
-.login-err{background:#1f0d0b;border:1px solid var(--danger);color:#e07070;font-family:'Inter',sans-serif;font-size:.8rem;padding:.6rem .85rem;border-radius:5px;margin-bottom:1rem;display:none}
-.btn-do-login{width:100%;padding:.7rem;background:var(--accent);color:#0c0b0a;border:none;border-radius:5px;font-size:.88rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:background .2s;margin-top:.5rem}
-.btn-do-login:hover{background:#fff}
-.btn-do-login:disabled{opacity:.5;cursor:not-allowed}
-.login-back{display:block;text-align:center;margin-top:1rem;font-family:'Inter',sans-serif;font-size:.78rem;color:var(--muted);cursor:pointer;background:transparent;border:none;width:100%}
-.login-back:hover{color:var(--text)}
-
-/* ADMIN LAYOUT */
-.sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:50;flex-shrink:0}
-.sidebar-logo{padding:1.4rem 1.25rem .9rem;font-style:italic;font-size:1.2rem;color:var(--accent);border-bottom:1px solid var(--border)}
+/* DASHBOARD (writer) */
+.sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:50}
+.sidebar-logo{padding:1.4rem 1.25rem .9rem;font-style:italic;font-size:1.2rem;color:var(--accent);border-bottom:1px solid var(--border);cursor:pointer}
 .sidebar-logo small{display:block;font-style:normal;font-size:.68rem;color:var(--muted);font-family:'Inter',sans-serif;margin-top:.15rem}
 .sidebar-nav{flex:1;padding:.65rem .55rem;display:flex;flex-direction:column;gap:.15rem}
 .s-item{display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;border-radius:5px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.82rem;color:var(--muted);transition:all .2s;border:none;background:transparent;width:100%;text-align:left}
@@ -92,41 +138,22 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
 .admin-topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 2rem;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
 .admin-topbar h2{font-family:'Inter',sans-serif;font-size:.9rem;font-weight:600;color:var(--text)}
 .admin-body{padding:2rem}
-
-/* SUBPAGES */
 .subpage{display:none}.subpage.on{display:block}
 
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem 1.1rem;border-radius:4px;border:none;cursor:pointer;font-size:.82rem;font-weight:500;transition:all .2s;font-family:'Inter',sans-serif}
-.btn-p{background:var(--accent);color:#0c0b0a}.btn-p:hover{background:#fff}
-.btn-g{background:transparent;color:var(--muted);border:1px solid var(--border)}.btn-g:hover{color:var(--text);border-color:var(--muted)}
-.btn-d{background:transparent;color:var(--danger);border:1px solid transparent}.btn-d:hover{background:#1f0d0b;border-color:var(--danger)}
-.btn-sm{padding:.3rem .7rem;font-size:.78rem}
-
-/* DASHBOARD */
+/* DASHBOARD STATS */
 .dash-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;margin-bottom:2rem}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1.25rem}
 .stat-val{font-size:2rem;font-weight:600;color:var(--accent);font-family:'Inter',sans-serif}
 .stat-lbl{font-size:.75rem;color:var(--muted);font-family:'Inter',sans-serif;margin-top:.2rem}
-.recent-title-bar{font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.85rem}
+.recent-bar{font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.85rem}
 .recent-row{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0;border-bottom:1px solid var(--border);gap:1rem;font-family:'Inter',sans-serif;font-size:.85rem}
 .recent-row:last-child{border-bottom:none}
-.recent-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;color:var(--text)}
-.recent-name:hover{color:var(--accent)}
 .pill{display:inline-block;padding:.18rem .55rem;border-radius:10px;font-size:.7rem;font-weight:500;font-family:'Inter',sans-serif}
 .pill-d{background:var(--surface2);color:var(--muted)}
 .pill-p{background:var(--warm);color:var(--accent)}
 
 /* POSTS TABLE */
 .tbl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem}
-.search-bar{position:relative}
-.search-bar input{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:.5rem 1rem .5rem 2.2rem;border-radius:5px;font-size:.82rem;font-family:'Inter',sans-serif;outline:none;width:210px;transition:border .2s}
-.search-bar input:focus{border-color:var(--muted)}
-.search-bar input::placeholder{color:var(--muted)}
-.search-bar svg{position:absolute;left:.65rem;top:50%;transform:translateY(-50%);color:var(--muted)}
-.filters{display:flex;gap:.35rem;flex-wrap:wrap}
-.f-btn{padding:.28rem .75rem;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.72rem;font-family:'Inter',sans-serif;transition:all .2s}
-.f-btn.on{background:var(--accent);color:#0c0b0a;border-color:var(--accent)}
 .tbl{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden}
 .tbl-row{display:grid;grid-template-columns:1fr 100px 110px 100px;align-items:center;padding:.8rem 1.2rem;border-bottom:1px solid var(--border);gap:1rem}
 .tbl-row:last-child{border-bottom:none}
@@ -175,7 +202,24 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
 .s-draft{background:var(--surface2);color:var(--muted)}
 .s-pub{background:var(--warm);color:var(--accent)}
 
-/* MODAL */
+/* NOTIF PANEL */
+.notif-panel{position:fixed;top:56px;right:1rem;width:320px;background:var(--surface);border:1px solid var(--border);border-radius:8px;z-index:100;box-shadow:0 8px 32px rgba(0,0,0,.5);display:none}
+.notif-panel.on{display:block}
+.notif-header{padding:.85rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;color:var(--text)}
+.notif-clear{font-size:.72rem;color:var(--muted);cursor:pointer;background:transparent;border:none;font-family:'Inter',sans-serif}
+.notif-clear:hover{color:var(--accent)}
+.notif-list{max-height:360px;overflow-y:auto}
+.notif-item{padding:.85rem 1rem;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s;font-family:'Inter',sans-serif;font-size:.8rem}
+.notif-item:last-child{border-bottom:none}
+.notif-item:hover{background:var(--surface2)}
+.notif-item.unread{background:var(--warm)}
+.notif-item.unread:hover{background:#32291e}
+.notif-text{color:var(--text);line-height:1.5;margin-bottom:.2rem}
+.notif-text strong{color:var(--accent)}
+.notif-time{font-size:.7rem;color:var(--muted)}
+.notif-empty{padding:2rem;text-align:center;color:var(--muted);font-size:.82rem}
+
+/* MISC */
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center}
 .modal-ov.on{display:flex}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1.75rem;max-width:360px;width:90%;font-family:'Inter',sans-serif}
@@ -184,83 +228,183 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
 .modal-acts{display:flex;gap:.75rem;justify-content:flex-end}
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:.65rem 1.2rem;border-radius:4px;font-family:'Inter',sans-serif;font-size:.82rem;z-index:300;transform:translateY(8px);opacity:0;transition:all .25s;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}
-.loading{text-align:center;padding:3rem;color:var(--muted);font-family:'Inter',sans-serif;font-size:.85rem;grid-column:1/-1}
+.loading{text-align:center;padding:3rem;color:var(--muted);font-family:'Inter',sans-serif;font-size:.85rem}
+.search-bar{position:relative}
+.search-bar input{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:.5rem 1rem .5rem 2.2rem;border-radius:5px;font-size:.82rem;font-family:'Inter',sans-serif;outline:none;width:210px;transition:border .2s}
+.search-bar input:focus{border-color:var(--muted)}
+.search-bar input::placeholder{color:var(--muted)}
+.search-bar svg{position:absolute;left:.65rem;top:50%;transform:translateY(-50%);color:var(--muted)}
+.filters{display:flex;gap:.35rem;flex-wrap:wrap}
+.f-btn{padding:.28rem .75rem;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-size:.72rem;font-family:'Inter',sans-serif;transition:all .2s}
+.f-btn.on{background:var(--accent);color:#0c0b0a;border-color:var(--accent)}
 </style>
 </head>
 <body>
 
-<!-- ══ PUBLIC ══ -->
-<div class="page on" id="pg-public">
-  <nav class="pub-nav">
-    <button class="pub-nav-logo" onclick="goto('pg-public')">Papyrous</button>
-    <button class="btn-login-nav" onclick="goto('pg-login')">Login Admin</button>
+<!-- ══ LOGIN ══ -->
+<div class="page on" id="pg-login">
+  <div class="auth-box">
+    <div class="auth-logo">Papyrous</div>
+    <div class="auth-sub">Masuk ke akunmu</div>
+    <div class="auth-card">
+      <div class="auth-err" id="li-err"></div>
+      <div class="field"><label>Email</label><input type="email" id="li-email" placeholder="email@kamu.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="li-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="auth-btn" id="li-btn" onclick="doLogin()">Masuk</button>
+      <div class="auth-switch">Belum punya akun? <a onclick="goto('pg-register')">Daftar di sini</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ REGISTER ══ -->
+<div class="page" id="pg-register">
+  <div class="auth-box">
+    <div class="auth-logo">Papyrous</div>
+    <div class="auth-sub">Buat akun baru</div>
+    <div class="auth-card">
+      <div class="auth-err" id="reg-err"></div>
+      <div class="field"><label>Nama</label><input type="text" id="reg-name" placeholder="Nama kamu"></div>
+      <div class="field"><label>Username</label><input type="text" id="reg-username" placeholder="contoh: johndoe (tanpa spasi)"></div>
+      <div class="field"><label>Email</label><input type="email" id="reg-email" placeholder="email@kamu.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="reg-pass" placeholder="Minimal 6 karakter" onkeydown="if(event.key==='Enter')doRegister()"></div>
+      <button class="auth-btn" id="reg-btn" onclick="doRegister()">Daftar</button>
+      <div class="auth-switch">Sudah punya akun? <a onclick="goto('pg-login')">Masuk di sini</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HOME (feed) ══ -->
+<div class="page" id="pg-home">
+  <nav class="nav">
+    <button class="nav-logo" onclick="goto('pg-home');loadFeed()">Papyrous</button>
+    <div class="nav-right">
+      <div class="nav-search">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="nav-search-input" placeholder="Cari penulis..." onkeydown="if(event.key==='Enter')doSearch()">
+      </div>
+      <button class="notif-btn" onclick="toggleNotif()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notif-badge"></span>
+      </button>
+      <div class="nav-avatar" id="nav-av" onclick="gotoMyProfile()">🖊</div>
+    </div>
   </nav>
-  <div class="pub-wrap">
-    <div class="profile-sec">
-      <div class="p-avatar" id="pub-av">🖊</div>
-      <div class="p-info">
-        <h1 id="pub-name">Papyrous</h1>
-        <p id="pub-bio"></p>
-        <div class="p-stats" id="pub-stats"></div>
+  <div class="feed-wrap">
+    <div class="feed-tabs">
+      <button class="feed-tab on" id="tab-explore" onclick="switchTab('explore')">Jelajahi</button>
+      <button class="feed-tab" id="tab-following" onclick="switchTab('following')">Following</button>
+    </div>
+    <div id="feed-container"><div class="loading">Memuat tulisan...</div></div>
+  </div>
+</div>
+
+<!-- ══ SEARCH PAGE ══ -->
+<div class="page" id="pg-search">
+  <nav class="nav">
+    <button class="nav-logo" onclick="goto('pg-home');loadFeed()">Papyrous</button>
+    <div class="nav-right">
+      <div class="nav-search">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="search-page-input" placeholder="Cari penulis..." onkeydown="if(event.key==='Enter')doSearchPage()">
+      </div>
+      <button class="notif-btn" onclick="toggleNotif()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notif-badge2"></span>
+      </button>
+      <div class="nav-avatar" id="nav-av2" onclick="gotoMyProfile()">🖊</div>
+    </div>
+  </nav>
+  <div class="search-wrap">
+    <div class="search-section-title" id="search-result-title">Hasil pencarian</div>
+    <div id="search-results"><div class="loading">Mencari...</div></div>
+  </div>
+</div>
+
+<!-- ══ PROFILE (public) ══ -->
+<div class="page" id="pg-profile">
+  <nav class="nav">
+    <button class="nav-logo" onclick="goto('pg-home');loadFeed()">Papyrous</button>
+    <div class="nav-right">
+      <button class="notif-btn" onclick="toggleNotif()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notif-badge3"></span>
+      </button>
+      <div class="nav-avatar" id="nav-av3" onclick="gotoMyProfile()">🖊</div>
+    </div>
+  </nav>
+  <div class="profile-wrap">
+    <div class="profile-header">
+      <div class="profile-av-lg" id="prof-av">🖊</div>
+      <div class="profile-info-right">
+        <h1 id="prof-name"></h1>
+        <div class="profile-username" id="prof-username"></div>
+        <div class="profile-bio" id="prof-bio"></div>
+        <div class="profile-stats-row">
+          <span><strong id="prof-posts-count">0</strong> tulisan</span>
+          <span><strong id="prof-followers-count">0</strong> followers</span>
+          <span><strong id="prof-following-count">0</strong> following</span>
+        </div>
+        <div class="profile-actions" id="prof-actions"></div>
       </div>
     </div>
-    <div class="pub-grid" id="pub-grid"><div class="loading">Memuat tulisan...</div></div>
+    <div id="prof-posts"><div class="loading">Memuat tulisan...</div></div>
   </div>
 </div>
 
 <!-- ══ ARTICLE ══ -->
 <div class="page" id="pg-article">
-  <nav class="pub-nav">
-    <button class="pub-nav-logo" onclick="goto('pg-public')">Papyrous</button>
-    <button class="btn-login-nav" onclick="goto('pg-login')">Login Admin</button>
+  <nav class="nav">
+    <button class="nav-logo" onclick="goto('pg-home');loadFeed()">Papyrous</button>
+    <div class="nav-right">
+      <button class="notif-btn" onclick="toggleNotif()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge" id="notif-badge4"></span>
+      </button>
+      <div class="nav-avatar" id="nav-av4" onclick="gotoMyProfile()">🖊</div>
+    </div>
   </nav>
   <div class="art-wrap">
-    <button class="art-back" onclick="goto('pg-public')">← Kembali</button>
+    <button class="art-back" id="art-back-btn">← Kembali</button>
+    <div class="art-author-row" id="art-author-row" onclick="">
+      <div class="art-author-av" id="art-av">🖊</div>
+      <div class="art-author-info">
+        <div class="art-author-name" id="art-author-name"></div>
+        <div class="art-author-meta" id="art-author-meta"></div>
+      </div>
+    </div>
     <div class="art-tags" id="art-tags"></div>
     <h1 class="art-title" id="art-title"></h1>
-    <div class="art-meta"><span id="art-date"></span><span style="width:3px;height:3px;border-radius:50%;background:var(--muted);display:inline-block"></span><span id="art-rt"></span></div>
     <div class="art-body" id="art-body"></div>
-    <div class="art-footer"><p>Terima kasih sudah membaca ✦</p><button class="art-back-btn" onclick="goto('pg-public')">← Tulisan lainnya</button></div>
-  </div>
-</div>
-
-<!-- ══ LOGIN ══ -->
-<div class="page" id="pg-login">
-  <div class="login-box">
-    <div class="login-logo">Papyrous</div>
-    <div class="login-sub">Masuk ke dashboard admin</div>
-    <div class="login-card">
-      <div class="login-err" id="login-err"></div>
-      <div class="field"><label>Email</label><input type="email" id="li-email" placeholder="email@kamu.com"></div>
-      <div class="field"><label>Password</label><input type="password" id="li-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
-      <button class="btn-do-login" id="li-btn" onclick="doLogin()">Masuk</button>
-      <button class="login-back" onclick="goto('pg-public')">← Kembali ke halaman publik</button>
+    <div class="art-footer">
+      <div class="art-author-av" id="art-av2">🖊</div>
+      <div>
+        <div style="font-family:'Inter',sans-serif;font-size:.82rem;color:var(--text);font-weight:500" id="art-footer-name"></div>
+        <div style="font-family:'Inter',sans-serif;font-size:.75rem;color:var(--muted)" id="art-footer-bio"></div>
+      </div>
+      <button class="btn-follow" id="art-follow-btn" style="margin-left:auto" onclick="toggleFollowArt()"></button>
     </div>
   </div>
 </div>
 
-<!-- ══ ADMIN ══ -->
-<div class="page" id="pg-admin">
+<!-- ══ DASHBOARD ══ -->
+<div class="page" id="pg-dashboard">
   <aside class="sidebar">
-    <div class="sidebar-logo">Papyrous <small>Admin Dashboard</small></div>
+    <div class="sidebar-logo" onclick="goto('pg-home');loadFeed()">Papyrous <small>Dashboard Penulis</small></div>
     <nav class="sidebar-nav">
       <button class="s-item on" id="si-dashboard" onclick="showSub('dashboard')">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard
       </button>
       <button class="s-item" id="si-posts" onclick="showSub('posts')">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Tulisan
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Tulisan Saya
       </button>
       <button class="s-item" id="si-editor" onclick="showSub('editor');newPost()">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Tulis Baru
       </button>
       <button class="s-item" id="si-profile" onclick="showSub('profile')">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profil
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Edit Profil
       </button>
-      <button class="s-item" id="si-accounts" onclick="showSub('accounts')">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Akun
-      </button>
-      <button class="s-item" onclick="goto('pg-public')">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Lihat Publik
+      <button class="s-item" onclick="goto('pg-home');loadFeed()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Ke Feed
       </button>
     </nav>
     <div class="sidebar-foot">
@@ -271,18 +415,14 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
   <main class="admin-main">
     <div class="admin-topbar"><h2 id="a-title">Dashboard</h2></div>
     <div class="admin-body">
-
-      <!-- DASHBOARD SUB -->
       <div class="subpage on" id="sub-dashboard">
         <div class="dash-stats" id="d-stats"></div>
-        <div class="recent-title-bar">Tulisan Terbaru</div>
+        <div class="recent-bar">Tulisan Terbaru</div>
         <div id="d-recent"></div>
       </div>
-
-      <!-- POSTS SUB -->
       <div class="subpage" id="sub-posts">
         <div class="tbl-header">
-          <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
             <div class="search-bar">
               <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
               <input type="text" id="s-input" placeholder="Cari..." oninput="renderTbl()">
@@ -296,8 +436,6 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
           <div id="tbl-body"></div>
         </div>
       </div>
-
-      <!-- EDITOR SUB -->
       <div class="subpage" id="sub-editor">
         <div class="ed-wrap">
           <div class="ed-top">
@@ -331,45 +469,40 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
             <button class="tb" onclick="insCode()" style="font-size:.7rem">&lt;/&gt;</button>
           </div>
           <div id="editor" contenteditable="true" data-placeholder="Mulai bercerita..."></div>
-          <div class="ed-foot"><span id="wc">0 kata</span><span></span></div>
+          <div class="ed-foot"><span id="wc">0 kata</span></div>
         </div>
       </div>
-
-      <!-- PROFILE SUB -->
       <div class="subpage" id="sub-profile">
         <div class="pf-form">
-          <h3>Profil Publik</h3>
+          <h3>Edit Profil</h3>
           <div class="av-row">
             <div class="av-prev" id="av-prev">🖊</div>
             <div style="flex:1"><div class="ff"><label>URL Foto Profil</label><input type="text" id="pf-av" placeholder="https://..." oninput="prevAv()"></div></div>
           </div>
-          <div class="ff"><label>Nama</label><input type="text" id="pf-name" placeholder="Nama kamu..."></div>
-          <div class="ff"><label>Bio</label><textarea id="pf-bio" placeholder="Ceritakan sedikit tentang dirimu..."></textarea></div>
+          <div class="ff"><label>Nama</label><input type="text" id="pf-name"></div>
+          <div class="ff"><label>Username</label><input type="text" id="pf-username" placeholder="tanpa spasi, huruf kecil"></div>
+          <div class="ff"><label>Bio</label><textarea id="pf-bio" placeholder="Ceritakan tentang dirimu..."></textarea></div>
           <button class="btn btn-p" onclick="savePf()">Simpan Profil</button>
         </div>
       </div>
+    </div>
+  </main>
+</div>
 
-      <!-- ACCOUNTS SUB -->
-      <div class="subpage" id="sub-accounts">
-        <div class="pf-form" style="max-width:500px">
-          <h3>Kelola Akun Admin</h3>
-          <p style="font-family:'Inter',sans-serif;font-size:.82rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6">Tambah akun admin baru. Mereka bisa login dan mengelola tulisan di dashboard ini.</p>
-          <div class="ff"><label>Email</label><input type="email" id="acc-email" placeholder="email@contoh.com"></div>
-          <div class="ff"><label>Password</label><input type="password" id="acc-pass" placeholder="Minimal 6 karakter"></div>
-          <div class="acc-err" id="acc-err" style="background:#1f0d0b;border:1px solid var(--danger);color:#e07070;font-family:'Inter',sans-serif;font-size:.8rem;padding:.6rem .85rem;border-radius:5px;margin-bottom:1rem;display:none"></div>
-          <button class="btn btn-p" id="acc-btn" onclick="addAccount()">Tambah Akun</button>
-        </div>
-        <div style="margin-top:2rem;max-width:500px">
-          <div style="font-family:'Inter',sans-serif;font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.85rem">Akun Terdaftar</div>
-          <div id="acc-list" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden"><div class="loading">Memuat...</div></div>
-        </div>
-      </div>
+<!-- NOTIF PANEL -->
+<div class="notif-panel" id="notif-panel">
+  <div class="notif-header">
+    Notifikasi
+    <button class="notif-clear" onclick="markAllRead()">Tandai semua dibaca</button>
+  </div>
+  <div class="notif-list" id="notif-list"><div class="notif-empty">Belum ada notifikasi</div></div>
+</div>
 
 <!-- DELETE MODAL -->
 <div class="modal-ov" id="del-modal">
   <div class="modal">
     <h3>Hapus tulisan ini?</h3>
-    <p>Tulisan akan dihapus permanen dan tidak bisa dikembalikan lagi.</p>
+    <p>Tulisan akan dihapus permanen.</p>
     <div class="modal-acts">
       <button class="btn btn-g btn-sm" onclick="closeMod()">Batal</button>
       <button class="btn btn-d btn-sm" onclick="confirmDel()">Hapus</button>
@@ -381,229 +514,429 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
 <script>
 const SB='https://oqndgjpwcdspodofedho.supabase.co';
 const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xbmRnanB3Y2RzcG9kb2ZlZGhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NDkwMzIsImV4cCI6MjA4ODUyNTAzMn0.EX5WIOSw_V9PQsn7JtU591HUM5RM2EfU10FtodpuCCU';
-let token=null, posts=[], profile={name:'Papyrous',bio:'',avatar_url:''};
-let curId=null, delId=null, activeF='all', saveTimer=null;
+let token=null, currentUser=null, myProfile=null;
+let myPosts=[], curPostId=null, delId=null, activeF='all', saveTimer=null;
+let currentProfileId=null, currentArticleAuthorId=null, prevPage='pg-home';
 const $=id=>document.getElementById(id);
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 
-// ── PAGE NAV ──
+// ── PAGE ──
 function goto(id){
-  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('on');});
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   $(id).classList.add('on');
   window.scrollTo(0,0);
+  // close notif panel
+  $('notif-panel').classList.remove('on');
 }
 
 // ── SUPABASE ──
-function hdr(auth){const h={'Content-Type':'application/json','apikey':KEY,'Authorization':'Bearer '+(auth&&token?token:KEY)};return h;}
-async function sbAuth(e,p){const r=await fetch(`${SB}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify({email:e,password:p})});return r.json();}
-async function sbGet(tbl,q=''){try{const r=await fetch(`${SB}/rest/v1/${tbl}?${q}`,{headers:hdr(true)});return r.ok?r.json():[];}catch{return[];}}
-async function sbUpsert(tbl,data){try{const r=await fetch(`${SB}/rest/v1/${tbl}`,{method:'POST',headers:{...hdr(true),'Prefer':'resolution=merge-duplicates'},body:JSON.stringify(data)});return r.ok;}catch{return false;}}
-async function sbDel(tbl,id){try{const r=await fetch(`${SB}/rest/v1/${tbl}?id=eq.${id}`,{method:'DELETE',headers:hdr(true)});return r.ok;}catch{return false;}}
+function hdr(auth=true){return{'Content-Type':'application/json','apikey':KEY,'Authorization':'Bearer '+(auth&&token?token:KEY)};}
+async function sbQ(tbl,q=''){try{const r=await fetch(`${SB}/rest/v1/${tbl}?${q}`,{headers:hdr()});return r.ok?r.json():[];}catch{return[];}}
+async function sbIns(tbl,data,upsert=false){try{const r=await fetch(`${SB}/rest/v1/${tbl}`,{method:'POST',headers:{...hdr(),Prefer:upsert?'resolution=merge-duplicates':'return=representation'},body:JSON.stringify(data)});return r.ok?r.json():null;}catch{return null;}}
+async function sbUp(tbl,q,data){try{const r=await fetch(`${SB}/rest/v1/${tbl}?${q}`,{method:'PATCH',headers:{...hdr(),Prefer:'return=representation'},body:JSON.stringify(data)});return r.ok?r.json():null;}catch{return null;}}
+async function sbDel(tbl,q){try{const r=await fetch(`${SB}/rest/v1/${tbl}?${q}`,{method:'DELETE',headers:hdr()});return r.ok;}catch{return false;}}
+async function sbRpc(fn,body){try{const r=await fetch(`${SB}/rest/v1/rpc/${fn}`,{method:'POST',headers:hdr(),body:JSON.stringify(body)});return r.ok?r.json():null;}catch{return null;}}
 
-// ── TOAST ──
+// ── UTILS ──
 function toast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2400);}
 function fmtDate(ts){return new Date(ts).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});}
+function fmtTimeAgo(ts){const s=Math.floor((Date.now()-ts)/1000);if(s<60)return 'baru saja';if(s<3600)return Math.floor(s/60)+' menit lalu';if(s<86400)return Math.floor(s/3600)+' jam lalu';return Math.floor(s/86400)+' hari lalu';}
 function readTime(c){const w=c.replace(/<[^>]+>/g,'').trim().split(/\s+/).length;return Math.max(1,Math.round(w/200))+' menit baca';}
+function avHtml(url,size=28){return url?`<img src="${url}" onerror="this.parentElement.textContent='🖊'">`:'🖊';}
+function updateNavAvatars(){const av=myProfile?.avatar_url;['nav-av','nav-av2','nav-av3','nav-av4'].forEach(id=>{const el=$(id);if(el)el.innerHTML=av?`<img src="${av}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:'🖊';});}
 
 // ── AUTH ──
 async function doLogin(){
-  const btn=$('li-btn'),err=$('login-err');
-  const email=$('li-email').value.trim(), pass=$('li-pass').value;
-  if(!email||!pass){err.textContent='Isi email dan password.';err.style.display='block';return;}
+  const btn=$('li-btn'),err=$('li-err');
+  const email=$('li-email').value.trim(),pass=$('li-pass').value;
+  if(!email||!pass){showErr(err,'Isi email dan password.');return;}
   btn.disabled=true;btn.textContent='Masuk...';
-  const res=await sbAuth(email,pass);
-  if(res.access_token){
-    token=res.access_token;
-    $('s-email').textContent=email;
-    err.style.display='none';
-    await loadAdminData();
-    goto('pg-admin');
-    showSub('dashboard');
-  } else {
-    err.textContent='Email atau password salah.';
-    err.style.display='block';
-  }
+  const r=await fetch(`${SB}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify({email,password:pass})});
+  const d=await r.json();
+  if(d.access_token){token=d.access_token;currentUser=d.user;err.style.display='none';await afterLogin();}
+  else{showErr(err,d.error_description||'Email atau password salah.');}
   btn.disabled=false;btn.textContent='Masuk';
 }
-async function doLogout(){token=null;goto('pg-public');await loadPublicData();renderPublic();}
 
-// ── DATA ──
-async function loadPublicData(){
-  const [p,pr]=await Promise.all([sbGet('posts','status=eq.published&order=updated_at.desc'),sbGet('profile','id=eq.1')]);
-  posts=(p||[]).map(x=>({id:x.id,title:x.title||'',content:x.content||'',tags:x.tags||[],status:'published',createdAt:x.created_at,updatedAt:x.updated_at}));
-  if(pr&&pr[0])profile=pr[0];
-}
-async function loadAdminData(){
-  const [p,pr]=await Promise.all([sbGet('posts','order=updated_at.desc'),sbGet('profile','id=eq.1')]);
-  posts=(p||[]).map(x=>({id:x.id,title:x.title||'',content:x.content||'',tags:x.tags||[],status:x.status||'draft',createdAt:x.created_at,updatedAt:x.updated_at}));
-  if(pr&&pr[0])profile=pr[0];
+async function doRegister(){
+  const btn=$('reg-btn'),err=$('reg-err');
+  const name=$('reg-name').value.trim(),username=$('reg-username').value.trim().toLowerCase().replace(/\s+/g,''),email=$('reg-email').value.trim(),pass=$('reg-pass').value;
+  if(!name||!username||!email||!pass){showErr(err,'Semua field wajib diisi.');return;}
+  if(pass.length<6){showErr(err,'Password minimal 6 karakter.');return;}
+  if(!/^[a-z0-9_]+$/.test(username)){showErr(err,'Username hanya boleh huruf kecil, angka, dan underscore.');return;}
+  // cek username unik
+  const existing=await sbQ('profiles',`username=eq.${username}`);
+  if(existing&&existing.length){showErr(err,'Username sudah dipakai.');return;}
+  btn.disabled=true;btn.textContent='Mendaftar...';
+  const r=await fetch(`${SB}/auth/v1/signup`,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify({email,password:pass})});
+  const d=await r.json();
+  if(d.user&&d.user.id){
+    // login langsung
+    const lr=await fetch(`${SB}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'Content-Type':'application/json','apikey':KEY},body:JSON.stringify({email,password:pass})});
+    const ld=await lr.json();
+    if(ld.access_token){
+      token=ld.access_token;currentUser=ld.user;
+      await sbIns('profiles',{id:currentUser.id,username,name,bio:'',avatar_url:'',created_at:Date.now()},true);
+      err.style.display='none';
+      await afterLogin();
+    }
+  } else {
+    showErr(err,d.msg||d.message||'Gagal mendaftar. Coba email lain.');
+  }
+  btn.disabled=false;btn.textContent='Daftar';
 }
 
-// ── PUBLIC ──
-function renderPublic(){
-  $('pub-name').textContent=profile.name||'Papyrous';
-  $('pub-bio').textContent=profile.bio||'';
-  const pub=posts.filter(p=>p.status==='published');
-  $('pub-stats').textContent=pub.length?`${pub.length} tulisan dipublikasikan`:'';
-  const av=$('pub-av');
-  av.innerHTML=profile.avatar_url?`<img src="${profile.avatar_url}" onerror="this.parentElement.textContent='🖊'">`:'🖊';
-  const g=$('pub-grid');
-  if(!posts.length){g.innerHTML='<div class="empty-pub">Belum ada tulisan yang dipublikasikan.</div>';return;}
-  g.innerHTML=posts.map(p=>{
-    const ex=p.content.replace(/<[^>]+>/g,'').slice(0,140)+'…';
-    const tgs=(p.tags||[]).map(t=>`<span class="tag">#${t}</span>`).join('');
-    return `<div class="pub-card" onclick="openArt('${p.id}')">
-      <div class="pub-card-title">${p.title||'Tanpa Judul'}</div>
-      <div class="pub-card-excerpt">${ex}</div>
-      <div class="pub-card-meta"><div class="pub-tags">${tgs}</div><span>${fmtDate(p.updatedAt)}</span></div>
+function showErr(el,msg){el.textContent=msg;el.style.display='block';}
+
+async function afterLogin(){
+  const pArr=await sbQ('profiles',`id=eq.${currentUser.id}`);
+  myProfile=pArr&&pArr[0]?pArr[0]:null;
+  if(!myProfile){
+    // buat profil default
+    const username='user_'+currentUser.id.slice(0,6);
+    await sbIns('profiles',{id:currentUser.id,username,name:currentUser.email.split('@')[0],bio:'',avatar_url:'',created_at:Date.now()},true);
+    const p2=await sbQ('profiles',`id=eq.${currentUser.id}`);
+    myProfile=p2&&p2[0]?p2[0]:null;
+  }
+  updateNavAvatars();
+  $('s-email').textContent=myProfile?.username||currentUser.email;
+  await loadFeed();
+  goto('pg-home');
+  loadNotifications();
+}
+
+async function doLogout(){token=null;currentUser=null;myProfile=null;goto('pg-login');}
+
+// ── FEED ──
+let currentTab='explore';
+async function loadFeed(){
+  const c=$('feed-container');
+  c.innerHTML='<div class="loading">Memuat tulisan...</div>';
+  let posts=[];
+  if(currentTab==='explore'){
+    posts=await sbQ('posts','status=eq.published&order=updated_at.desc&limit=30');
+  } else {
+    // following feed
+    if(!currentUser){c.innerHTML='<div class="empty-feed"><p>Login untuk melihat feed following.</p></div>';return;}
+    const follows=await sbQ('follows',`follower_id=eq.${currentUser.id}`);
+    const ids=follows.map(f=>f.following_id);
+    if(!ids.length){c.innerHTML='<div class="empty-feed"><p>Kamu belum mengikuti siapapun.<br>Cari penulis menarik dan follow mereka!</p></div>';return;}
+    posts=await sbQ('posts',`status=eq.published&user_id=in.(${ids.join(',')})&order=updated_at.desc&limit=30`);
+  }
+  if(!posts||!posts.length){c.innerHTML='<div class="empty-feed"><p>Belum ada tulisan di sini.</p></div>';return;}
+  // load profiles
+  const uids=[...new Set(posts.map(p=>p.user_id))];
+  const profiles=await sbQ('profiles',`id=in.(${uids.join(',')})`);
+  const profMap={};profiles.forEach(p=>profMap[p.id]=p);
+  c.innerHTML=posts.map(p=>{
+    const prof=profMap[p.user_id]||{};
+    const excerpt=(p.content||'').replace(/<[^>]+>/g,'').slice(0,140)+'…';
+    const tags=(p.tags||[]).map(t=>`<span class="post-tag">#${t}</span>`).join('');
+    return `<div class="post-card" onclick="openArticle('${p.id}','pg-home')">
+      <div class="post-card-author">
+        <div class="author-av" onclick="event.stopPropagation();openProfile('${p.user_id}')">${avHtml(prof.avatar_url)}</div>
+        <span class="author-name" onclick="event.stopPropagation();openProfile('${p.user_id}')"><strong>${prof.name||'Anonim'}</strong> · @${prof.username||'?'}</span>
+      </div>
+      <div class="post-title">${p.title||'Tanpa Judul'}</div>
+      <div class="post-excerpt">${excerpt}</div>
+      <div class="post-meta">${tags}<span>${fmtDate(p.updated_at)}</span><span>${readTime(p.content||'')}</span></div>
     </div>`;
   }).join('');
 }
 
-function openArt(id){
-  const p=posts.find(x=>x.id===id);if(!p)return;
-  $('art-title').textContent=p.title||'Tanpa Judul';
-  $('art-date').textContent=fmtDate(p.updatedAt);
-  $('art-rt').textContent=readTime(p.content);
-  $('art-tags').innerHTML=(p.tags||[]).map(t=>`<span class="art-tag">#${t}</span>`).join('');
-  $('art-body').innerHTML=p.content;
-  goto('pg-article');
+function switchTab(tab){
+  currentTab=tab;
+  $('tab-explore').classList.toggle('on',tab==='explore');
+  $('tab-following').classList.toggle('on',tab==='following');
+  loadFeed();
 }
 
-// ── ACCOUNTS ──
-async function loadAccounts(){
-  try{
-    const r=await fetch(`${SB}/auth/v1/admin/users`,{headers:{...hdr(true),'apikey':KEY}});
-    const data=await r.json();
-    const users=data.users||[];
-    const list=$('acc-list');
-    if(!users.length){list.innerHTML='<div class="loading">Belum ada akun.</div>';return;}
-    list.innerHTML=users.map(u=>`
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.2rem;border-bottom:1px solid var(--border);gap:1rem;font-family:'Inter',sans-serif;font-size:.82rem">
-        <div>
-          <div style="color:var(--text)">${u.email}</div>
-          <div style="font-size:.72rem;color:var(--muted);margin-top:.15rem">Dibuat ${fmtDate(new Date(u.created_at).getTime())}</div>
-        </div>
-        <span style="font-size:.72rem;color:var(--muted);background:var(--surface2);border:1px solid var(--border);padding:.18rem .55rem;border-radius:10px">Admin</span>
-      </div>`).join('');
-    // remove last border
-    const rows=list.querySelectorAll('div[style*="border-bottom"]');
-    if(rows.length)rows[rows.length-1].style.borderBottom='none';
-  }catch(e){$('acc-list').innerHTML='<div class="loading">Gagal memuat akun.</div>';}
+// ── SEARCH ──
+function doSearch(){
+  const q=$('nav-search-input').value.trim();
+  if(!q)return;
+  $('search-page-input').value=q;
+  goto('pg-search');
+  runSearch(q);
 }
-
-async function addAccount(){
-  const btn=$('acc-btn'),err=$('acc-err');
-  const email=$('acc-email').value.trim(), pass=$('acc-pass').value;
-  if(!email||!pass){err.textContent='Email dan password wajib diisi.';err.style.display='block';return;}
-  if(pass.length<6){err.textContent='Password minimal 6 karakter.';err.style.display='block';return;}
-  btn.disabled=true;btn.textContent='Menambahkan...';
-  try{
-    const r=await fetch(`${SB}/auth/v1/admin/users`,{
-      method:'POST',
-      headers:{...hdr(true),'apikey':KEY},
-      body:JSON.stringify({email,password:pass,email_confirm:true})
+function doSearchPage(){
+  const q=$('search-page-input').value.trim();
+  if(q)runSearch(q);
+}
+async function runSearch(q){
+  $('search-result-title').textContent=`Hasil untuk "${q}"`;
+  $('search-results').innerHTML='<div class="loading">Mencari...</div>';
+  const users=await sbQ('profiles',`or=(username.ilike.*${q}*,name.ilike.*${q}*)&limit=20`);
+  if(!users||!users.length){$('search-results').innerHTML='<div class="loading">Tidak ada hasil.</div>';return;}
+  $('search-results').innerHTML=users.map(u=>`
+    <div class="user-row">
+      <div class="user-row-av" onclick="openProfile('${u.id}')">${avHtml(u.avatar_url,40)}</div>
+      <div class="user-row-info" onclick="openProfile('${u.id}')">
+        <div class="user-row-name">${u.name||'Anonim'}</div>
+        <div class="user-row-username">@${u.username}</div>
+        ${u.bio?`<div class="user-row-bio">${u.bio}</div>`:''}
+      </div>
+      ${currentUser&&u.id!==currentUser.id?`<button class="btn-follow" id="follow-btn-${u.id}" onclick="toggleFollow('${u.id}')">Follow</button>`:''}
+    </div>`).join('');
+  // cek status follow
+  if(currentUser){
+    users.forEach(async u=>{
+      if(u.id===currentUser.id)return;
+      const f=await sbQ('follows',`follower_id=eq.${currentUser.id}&following_id=eq.${u.id}`);
+      const btn=$(`follow-btn-${u.id}`);
+      if(btn&&f&&f.length){btn.textContent='Following';btn.classList.add('following');}
     });
-    const data=await r.json();
-    if(data.id){
-      err.style.display='none';
-      $('acc-email').value='';$('acc-pass').value='';
-      toast('Akun berhasil ditambahkan ✓');
-      loadAccounts();
-    } else {
-      err.textContent=data.msg||data.message||'Gagal menambahkan akun.';
-      err.style.display='block';
-    }
-  }catch(e){err.textContent='Terjadi kesalahan.';err.style.display='block';}
-  btn.disabled=false;btn.textContent='Tambah Akun';
+  }
 }
 
-// ── ADMIN SUBS ──
+// ── PROFILE ──
+async function openProfile(userId){
+  prevPage=document.querySelector('.page.on')?.id||'pg-home';
+  currentProfileId=userId;
+  goto('pg-profile');
+  $('prof-posts').innerHTML='<div class="loading">Memuat...</div>';
+  const [pArr,postsArr,followersArr,followingArr]=await Promise.all([
+    sbQ('profiles',`id=eq.${userId}`),
+    sbQ('posts',`user_id=eq.${userId}&status=eq.published&order=updated_at.desc`),
+    sbQ('follows',`following_id=eq.${userId}`),
+    sbQ('follows',`follower_id=eq.${userId}`)
+  ]);
+  const p=pArr&&pArr[0]?pArr[0]:{};
+  $('prof-av').innerHTML=avHtml(p.avatar_url,80);
+  $('prof-name').textContent=p.name||'Anonim';
+  $('prof-username').textContent='@'+(p.username||'');
+  $('prof-bio').textContent=p.bio||'';
+  $('prof-posts-count').textContent=postsArr?.length||0;
+  $('prof-followers-count').textContent=followersArr?.length||0;
+  $('prof-following-count').textContent=followingArr?.length||0;
+  // actions
+  const acts=$('prof-actions');
+  if(currentUser&&userId===currentUser.id){
+    acts.innerHTML=`<button class="btn btn-g btn-sm" onclick="goto('pg-dashboard');showSub('profile')">Edit Profil</button><button class="btn btn-p btn-sm" onclick="goto('pg-dashboard')">Dashboard</button>`;
+  } else if(currentUser){
+    const isF=await sbQ('follows',`follower_id=eq.${currentUser.id}&following_id=eq.${userId}`);
+    const following=isF&&isF.length;
+    acts.innerHTML=`<button class="btn-follow${following?' following':''}" id="prof-follow-btn" onclick="toggleFollow('${userId}')">${following?'Following':'Follow'}</button>`;
+  } else {
+    acts.innerHTML=`<button class="btn btn-p btn-sm" onclick="goto('pg-login')">Login untuk follow</button>`;
+  }
+  // posts
+  if(!postsArr||!postsArr.length){$('prof-posts').innerHTML='<div class="empty-feed"><p>Belum ada tulisan dipublikasikan.</p></div>';return;}
+  $('prof-posts').innerHTML=postsArr.map(post=>{
+    const excerpt=(post.content||'').replace(/<[^>]+>/g,'').slice(0,120)+'…';
+    const tags=(post.tags||[]).map(t=>`<span class="post-tag">#${t}</span>`).join('');
+    return `<div class="post-card" onclick="openArticle('${post.id}','pg-profile')">
+      <div class="post-title">${post.title||'Tanpa Judul'}</div>
+      <div class="post-excerpt">${excerpt}</div>
+      <div class="post-meta">${tags}<span>${fmtDate(post.updated_at)}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function gotoMyProfile(){
+  if(!currentUser){goto('pg-login');return;}
+  if(myProfile)openProfile(currentUser.id);
+}
+
+// ── FOLLOW ──
+async function toggleFollow(userId){
+  if(!currentUser){toast('Login dulu untuk follow!');return;}
+  const existing=await sbQ('follows',`follower_id=eq.${currentUser.id}&following_id=eq.${userId}`);
+  if(existing&&existing.length){
+    await sbDel('follows',`follower_id=eq.${currentUser.id}&following_id=eq.${userId}`);
+    updateFollowBtns(userId,false);
+    toast('Unfollow berhasil');
+  } else {
+    await sbIns('follows',{follower_id:currentUser.id,following_id:userId,created_at:Date.now()});
+    // kirim notif
+    const profArr=await sbQ('profiles',`id=eq.${currentUser.id}`);
+    const myProf=profArr&&profArr[0]?profArr[0]:myProfile;
+    await sbIns('notifications',{id:uid(),user_id:userId,from_user_id:currentUser.id,post_id:null,type:'follow',read:false,created_at:Date.now()});
+    updateFollowBtns(userId,true);
+    toast('Berhasil follow!');
+  }
+  // refresh follower count if on profile page
+  if(document.querySelector('#pg-profile.on')){
+    const fArr=await sbQ('follows',`following_id=eq.${userId}`);
+    $('prof-followers-count').textContent=fArr?.length||0;
+  }
+}
+function updateFollowBtns(userId,isFollowing){
+  ['prof-follow-btn',`follow-btn-${userId}`,'art-follow-btn'].forEach(id=>{
+    const btn=$(id);if(!btn)return;
+    if(id==='art-follow-btn'){btn.textContent=isFollowing?'Following':'Follow';btn.classList.toggle('following',isFollowing);return;}
+    btn.textContent=isFollowing?'Following':'Follow';
+    btn.classList.toggle('following',isFollowing);
+  });
+}
+
+// ── ARTICLE ──
+async function openArticle(postId, from='pg-home'){
+  prevPage=from;
+  goto('pg-article');
+  $('art-body').innerHTML='<div class="loading">Memuat...</div>';
+  const posts=await sbQ('posts',`id=eq.${postId}`);
+  const post=posts&&posts[0];if(!post)return;
+  const profArr=await sbQ('profiles',`id=eq.${post.user_id}`);
+  const prof=profArr&&profArr[0]?profArr[0]:{};
+  currentArticleAuthorId=post.user_id;
+  // author row
+  $('art-av').innerHTML=avHtml(prof.avatar_url,36);
+  $('art-av2').innerHTML=avHtml(prof.avatar_url,36);
+  $('art-author-name').textContent=prof.name||'Anonim';
+  $('art-author-meta').textContent=`@${prof.username||'?'} · ${fmtDate(post.updated_at)} · ${readTime(post.content||'')}`;
+  $('art-author-row').onclick=()=>openProfile(post.user_id);
+  $('art-footer-name').textContent=prof.name||'Anonim';
+  $('art-footer-bio').textContent=prof.bio||'';
+  $('art-tags').innerHTML=(post.tags||[]).map(t=>`<span class="art-tag">#${t}</span>`).join('');
+  $('art-title').textContent=post.title||'Tanpa Judul';
+  $('art-body').innerHTML=post.content||'';
+  $('art-back-btn').onclick=()=>goto(prevPage);
+  // follow btn
+  const followBtn=$('art-follow-btn');
+  if(currentUser&&post.user_id!==currentUser.id){
+    followBtn.style.display='';
+    const isF=await sbQ('follows',`follower_id=eq.${currentUser.id}&following_id=eq.${post.user_id}`);
+    followBtn.textContent=isF&&isF.length?'Following':'Follow';
+    followBtn.classList.toggle('following',!!(isF&&isF.length));
+  } else {followBtn.style.display='none';}
+}
+async function toggleFollowArt(){
+  if(currentArticleAuthorId)await toggleFollow(currentArticleAuthorId);
+}
+
+// ── NOTIFICATIONS ──
+async function loadNotifications(){
+  if(!currentUser)return;
+  const notifs=await sbQ('notifications',`user_id=eq.${currentUser.id}&order=created_at.desc&limit=20`);
+  const unread=notifs?notifs.filter(n=>!n.read).length:0;
+  ['notif-badge','notif-badge2','notif-badge3','notif-badge4'].forEach(id=>{
+    const el=$(id);if(el)el.classList.toggle('on',unread>0);
+  });
+  if(!notifs||!notifs.length){$('notif-list').innerHTML='<div class="notif-empty">Belum ada notifikasi</div>';return;}
+  const fromIds=[...new Set(notifs.map(n=>n.from_user_id).filter(Boolean))];
+  let profMap={};
+  if(fromIds.length){const profs=await sbQ('profiles',`id=in.(${fromIds.join(',')})`);profs.forEach(p=>profMap[p.id]=p);}
+  $('notif-list').innerHTML=notifs.map(n=>{
+    const from=profMap[n.from_user_id]||{};
+    let text='';
+    if(n.type==='follow')text=`<strong>${from.name||'Seseorang'}</strong> mulai mengikutimu`;
+    if(n.type==='new_post')text=`<strong>${from.name||'Seseorang'}</strong> memposting tulisan baru`;
+    return `<div class="notif-item${n.read?'':' unread'}" onclick="handleNotifClick('${n.id}','${n.type}','${n.from_user_id||''}','${n.post_id||''}')">
+      <div class="notif-text">${text}</div>
+      <div class="notif-time">${fmtTimeAgo(n.created_at)}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleNotif(){
+  $('notif-panel').classList.toggle('on');
+  if($('notif-panel').classList.contains('on'))loadNotifications();
+}
+
+async function handleNotifClick(id,type,fromId,postId){
+  await sbUp('notifications',`id=eq.${id}`,{read:true});
+  $('notif-panel').classList.remove('on');
+  if(type==='follow'&&fromId)openProfile(fromId);
+  if(type==='new_post'&&postId)openArticle(postId,'pg-home');
+  loadNotifications();
+}
+
+async function markAllRead(){
+  if(!currentUser)return;
+  await sbUp('notifications',`user_id=eq.${currentUser.id}&read=eq.false`,{read:true});
+  loadNotifications();
+  toast('Semua notifikasi ditandai dibaca');
+}
+
+// ── DASHBOARD ──
 function showSub(name){
   document.querySelectorAll('.subpage').forEach(s=>s.classList.remove('on'));
   document.querySelectorAll('.s-item').forEach(s=>s.classList.remove('on'));
   $(`sub-${name}`).classList.add('on');
   if($(`si-${name}`))$(`si-${name}`).classList.add('on');
-  const titles={dashboard:'Dashboard',posts:'Tulisan',editor:'Editor',profile:'Profil'};
+  const titles={dashboard:'Dashboard',posts:'Tulisan Saya',editor:'Editor',profile:'Edit Profil'};
   $('a-title').textContent=titles[name]||'';
   if(name==='dashboard')renderDash();
-  if(name==='posts')renderTbl();
+  if(name==='posts'){loadMyPosts().then(renderTbl);}
   if(name==='profile')loadPfEditor();
-  if(name==='accounts')loadAccounts();
+}
+
+async function loadMyPosts(){
+  if(!currentUser)return;
+  const p=await sbQ('posts',`user_id=eq.${currentUser.id}&order=updated_at.desc`);
+  myPosts=p||[];
 }
 
 function renderDash(){
-  const pub=posts.filter(p=>p.status==='published').length;
-  const dr=posts.filter(p=>p.status==='draft').length;
-  $('d-stats').innerHTML=`
-    <div class="stat-card"><div class="stat-val">${posts.length}</div><div class="stat-lbl">Total Tulisan</div></div>
-    <div class="stat-card"><div class="stat-val">${pub}</div><div class="stat-lbl">Published</div></div>
-    <div class="stat-card"><div class="stat-val">${dr}</div><div class="stat-lbl">Draft</div></div>`;
-  $('d-recent').innerHTML=posts.slice(0,5).map(p=>`
-    <div class="recent-row">
-      <span class="recent-name" onclick="editPost('${p.id}')">${p.title||'Tanpa judul'}</span>
-      <span class="pill ${p.status==='published'?'pill-p':'pill-d'}">${p.status==='published'?'Published':'Draft'}</span>
-      <span style="font-size:.72rem;color:var(--muted);font-family:'Inter',sans-serif">${fmtDate(p.updatedAt)}</span>
-    </div>`).join('')||'<div style="color:var(--muted);font-family:Inter,sans-serif;font-size:.85rem;padding:1rem 0">Belum ada tulisan.</div>';
+  if(!myPosts.length){loadMyPosts().then(()=>{
+    const pub=myPosts.filter(p=>p.status==='published').length;
+    const dr=myPosts.filter(p=>p.status==='draft').length;
+    $('d-stats').innerHTML=`<div class="stat-card"><div class="stat-val">${myPosts.length}</div><div class="stat-lbl">Total Tulisan</div></div><div class="stat-card"><div class="stat-val">${pub}</div><div class="stat-lbl">Published</div></div><div class="stat-card"><div class="stat-val">${dr}</div><div class="stat-lbl">Draft</div></div>`;
+    $('d-recent').innerHTML=myPosts.slice(0,5).map(p=>`<div class="recent-row"><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:var(--text)" onclick="editPost('${p.id}')">${p.title||'Tanpa judul'}</span><span class="pill ${p.status==='published'?'pill-p':'pill-d'}">${p.status==='published'?'Published':'Draft'}</span></div>`).join('')||'<div style="color:var(--muted);font-family:Inter,sans-serif;font-size:.85rem;padding:1rem 0">Belum ada tulisan.</div>';
+  });return;}
+  const pub=myPosts.filter(p=>p.status==='published').length;
+  const dr=myPosts.filter(p=>p.status==='draft').length;
+  $('d-stats').innerHTML=`<div class="stat-card"><div class="stat-val">${myPosts.length}</div><div class="stat-lbl">Total Tulisan</div></div><div class="stat-card"><div class="stat-val">${pub}</div><div class="stat-lbl">Published</div></div><div class="stat-card"><div class="stat-val">${dr}</div><div class="stat-lbl">Draft</div></div>`;
+  $('d-recent').innerHTML=myPosts.slice(0,5).map(p=>`<div class="recent-row"><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;color:var(--text)" onclick="editPost('${p.id}')">${p.title||'Tanpa judul'}</span><span class="pill ${p.status==='published'?'pill-p':'pill-d'}">${p.status==='published'?'Published':'Draft'}</span></div>`).join('')||'<div style="color:var(--muted);font-family:Inter,sans-serif;font-size:.85rem;padding:1rem 0">Belum ada tulisan.</div>';
 }
 
 function renderTbl(){
-  const tags=new Set();posts.forEach(p=>(p.tags||[]).forEach(t=>tags.add(t)));
+  const tags=new Set();myPosts.forEach(p=>(p.tags||[]).forEach(t=>tags.add(t)));
   const filters=[{k:'all',l:'Semua'},{k:'published',l:'Published'},{k:'draft',l:'Draft'},...[...tags].map(t=>({k:'tag:'+t,l:'#'+t}))];
   $('f-bar').innerHTML=filters.map(f=>`<button class="f-btn${activeF===f.k?' on':''}" onclick="setF('${f.k}')">${f.l}</button>`).join('');
-  const q=$('s-input').value.toLowerCase();
-  const filtered=posts.filter(p=>{
+  const q=($('s-input').value||'').toLowerCase();
+  const filtered=myPosts.filter(p=>{
     if(activeF==='published'&&p.status!=='published')return false;
     if(activeF==='draft'&&p.status!=='draft')return false;
     if(activeF.startsWith('tag:')&&!(p.tags||[]).includes(activeF.slice(4)))return false;
-    if(q&&!p.title.toLowerCase().includes(q))return false;
+    if(q&&!(p.title||'').toLowerCase().includes(q))return false;
     return true;
   });
-  $('tbl-body').innerHTML=filtered.length?filtered.map(p=>`
-    <div class="tbl-row">
-      <div class="tbl-name" onclick="editPost('${p.id}')">${p.title||'<em style="opacity:.4">Tanpa judul</em>'}</div>
-      <div class="tbl-cell"><span class="pill ${p.status==='published'?'pill-p':'pill-d'}">${p.status==='published'?'Published':'Draft'}</span></div>
-      <div class="tbl-cell">${fmtDate(p.updatedAt)}</div>
-      <div class="tbl-acts">
-        <button class="btn btn-g btn-sm" onclick="editPost('${p.id}')">Edit</button>
-        <button class="btn btn-d btn-sm" onclick="askDel('${p.id}')">Hapus</button>
-      </div>
-    </div>`).join(''):'<div class="loading">Tidak ada tulisan.</div>';
+  $('tbl-body').innerHTML=filtered.length?filtered.map(p=>`<div class="tbl-row"><div class="tbl-name" onclick="editPost('${p.id}')">${p.title||'<em style="opacity:.4">Tanpa judul</em>'}</div><div class="tbl-cell"><span class="pill ${p.status==='published'?'pill-p':'pill-d'}">${p.status==='published'?'Published':'Draft'}</span></div><div class="tbl-cell">${fmtDate(p.updated_at)}</div><div class="tbl-acts"><button class="btn btn-g btn-sm" onclick="editPost('${p.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="askDel('${p.id}')">Hapus</button></div></div>`).join(''):'<div class="loading">Tidak ada tulisan.</div>';
 }
 function setF(f){activeF=f;renderTbl();}
-function editPost(id){curId=id;showSub('editor');openEd();}
+function editPost(id){curPostId=id;showSub('editor');openEd();}
 
-// ── PROFILE ──
+// ── PROFILE EDITOR ──
 function loadPfEditor(){
-  $('pf-name').value=profile.name||'';
-  $('pf-bio').value=profile.bio||'';
-  $('pf-av').value=profile.avatar_url||'';
+  if(!myProfile)return;
+  $('pf-name').value=myProfile.name||'';
+  $('pf-username').value=myProfile.username||'';
+  $('pf-bio').value=myProfile.bio||'';
+  $('pf-av').value=myProfile.avatar_url||'';
   prevAv();
 }
-function prevAv(){
-  const url=$('pf-av').value.trim();
-  $('av-prev').innerHTML=url?`<img src="${url}" onerror="this.parentElement.textContent='🖊'">`:'🖊';
-}
+function prevAv(){const url=$('pf-av').value.trim();$('av-prev').innerHTML=url?`<img src="${url}" onerror="this.parentElement.textContent='🖊'">`:'🖊';}
 async function savePf(){
-  profile.name=$('pf-name').value.trim()||'Papyrous';
-  profile.bio=$('pf-bio').value.trim();
-  profile.avatar_url=$('pf-av').value.trim();
-  const ok=await sbUpsert('profile',{id:1,name:profile.name,bio:profile.bio,avatar_url:profile.avatar_url});
-  ok?toast('Profil tersimpan ✓'):toast('Gagal menyimpan');
+  if(!currentUser)return;
+  const name=$('pf-name').value.trim();
+  const username=$('pf-username').value.trim().toLowerCase().replace(/\s+/g,'');
+  const bio=$('pf-bio').value.trim();
+  const avatar_url=$('pf-av').value.trim();
+  if(!username){toast('Username tidak boleh kosong');return;}
+  // cek username unik (kecuali milik sendiri)
+  const ex=await sbQ('profiles',`username=eq.${username}&id=neq.${currentUser.id}`);
+  if(ex&&ex.length){toast('Username sudah dipakai');return;}
+  await sbUp('profiles',`id=eq.${currentUser.id}`,{name,username,bio,avatar_url});
+  myProfile={...myProfile,name,username,bio,avatar_url};
+  updateNavAvatars();
+  $('s-email').textContent=username;
+  toast('Profil tersimpan ✓');
 }
 
 // ── EDITOR ──
 function newPost(){
-  curId=uid();
+  curPostId=uid();
   const now=Date.now();
-  posts.unshift({id:curId,title:'',content:'',tags:[],status:'draft',createdAt:now,updatedAt:now});
+  myPosts.unshift({id:curPostId,user_id:currentUser?.id,title:'',content:'',tags:[],status:'draft',created_at:now,updated_at:now});
   openEd();
 }
 function openEd(){
-  const p=posts.find(x=>x.id===curId);if(!p)return;
-  $('edit-title').value=p.title;
+  const p=myPosts.find(x=>x.id===curPostId);if(!p)return;
+  $('edit-title').value=p.title||'';
   $('edit-tags').value=(p.tags||[]).join(', ');
-  $('editor').innerHTML=p.content;
+  $('editor').innerHTML=p.content||'';
   setBadge(p.status);$('e-saved').textContent='';wc();
   $('editor').focus();
   if(saveTimer)clearInterval(saveTimer);
@@ -612,19 +945,31 @@ function openEd(){
 }
 function wc(){const t=$('editor').innerText.trim();$('wc').textContent=(t?t.split(/\s+/).length:0)+' kata';}
 function syncLocal(ns){
-  const p=posts.find(x=>x.id===curId);if(!p)return p;
+  const p=myPosts.find(x=>x.id===curPostId);if(!p)return p;
   p.title=$('edit-title').value.trim();p.content=$('editor').innerHTML;
   p.tags=$('edit-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
-  p.updatedAt=Date.now();if(ns)p.status=ns;return p;
+  p.updated_at=Date.now();if(ns)p.status=ns;return p;
 }
 async function syncSave(ns){
   const p=syncLocal(ns);if(!p)return;
-  await sbUpsert('posts',{id:p.id,title:p.title,content:p.content,tags:p.tags,status:p.status,created_at:p.createdAt,updated_at:p.updatedAt});
+  await sbIns('posts',{id:p.id,user_id:p.user_id||currentUser?.id,title:p.title,content:p.content,tags:p.tags,status:p.status,created_at:p.created_at||p.createdAt,updated_at:p.updated_at},true);
   $('e-saved').textContent='Tersimpan '+new Date().toLocaleTimeString('id-ID');
 }
 function setBadge(st){const b=$('e-badge');b.textContent=st==='published'?'Published':'Draft';b.className='s-badge '+(st==='published'?'s-pub':'s-draft');}
 async function saveDraft(){await syncSave('draft');setBadge('draft');toast('Draft tersimpan');}
-async function pubPost(){await syncSave('published');setBadge('published');toast('Tulisan dipublish ✓');}
+async function pubPost(){
+  const p=syncLocal('published');if(!p)return;
+  await sbIns('posts',{id:p.id,user_id:p.user_id||currentUser?.id,title:p.title,content:p.content,tags:p.tags,status:'published',created_at:p.created_at||p.createdAt,updated_at:p.updated_at},true);
+  setBadge('published');
+  $('e-saved').textContent='Dipublish '+new Date().toLocaleTimeString('id-ID');
+  // kirim notif ke semua followers
+  const followers=await sbQ('follows',`following_id=eq.${currentUser.id}`);
+  if(followers&&followers.length){
+    const notifData=followers.map(f=>({id:uid(),user_id:f.follower_id,from_user_id:currentUser.id,post_id:p.id,type:'new_post',read:false,created_at:Date.now()}));
+    for(const n of notifData)await sbIns('notifications',n);
+  }
+  toast('Tulisan dipublish ✓');
+}
 function fmt(cmd){document.execCommand(cmd,false,null);$('editor').focus();}
 function fmtB(tag){document.execCommand('formatBlock',false,tag);$('editor').focus();}
 function insLink(){const u=prompt('URL:');if(u)document.execCommand('createLink',false,u);$('editor').focus();}
@@ -634,16 +979,19 @@ function insCode(){const s=window.getSelection();document.execCommand('insertHTM
 function askDel(id){delId=id;$('del-modal').classList.add('on');}
 function closeMod(){$('del-modal').classList.remove('on');delId=null;}
 async function confirmDel(){
-  await sbDel('posts',delId);
-  posts=posts.filter(p=>p.id!==delId);
+  await sbDel('posts',`id=eq.${delId}&user_id=eq.${currentUser.id}`);
+  myPosts=myPosts.filter(p=>p.id!==delId);
   closeMod();renderTbl();renderDash();toast('Tulisan dihapus');
 }
 
+// close notif panel on outside click
+document.addEventListener('click',e=>{
+  if(!$('notif-panel').contains(e.target)&&!e.target.closest('.notif-btn'))
+    $('notif-panel').classList.remove('on');
+});
+
 // ── INIT ──
-(async()=>{
-  await loadPublicData();
-  renderPublic();
-})();
+goto('pg-login');
 </script>
 </body>
 </html>
