@@ -357,8 +357,8 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
         <div class="profile-username" id="prof-username"></div>
         <div class="profile-bio" id="prof-bio"></div>
         <div class="profile-stats-row">
-          <span style="cursor:pointer" onclick="openFollowList('${currentProfileId}','followers')"><strong id="prof-followers-count">0</strong> followers</span>
-          <span style="cursor:pointer" onclick="openFollowList('${currentProfileId}','following')"><strong id="prof-following-count">0</strong> following</span>
+          <span style="cursor:pointer" onclick="openFollowList(currentProfileId,'followers')"><strong id="prof-followers-count">0</strong> followers</span>
+          <span style="cursor:pointer" onclick="openFollowList(currentProfileId,'following')"><strong id="prof-following-count">0</strong> following</span>
           <span><strong id="prof-posts-count">0</strong> tulisan</span>
         </div>
         <div class="profile-actions" id="prof-actions"></div>
@@ -650,9 +650,9 @@ async function afterLogin(){
   updateNavAvatars();
   updateCommentAv();
   $('s-email').textContent=myProfile?.username||currentUser.email;
-  await loadFeed();
-  goto('pg-home');
-  loadNotifications();
+  await loadMyPosts();
+  goto('pg-dashboard');
+  showSub('dashboard');
 }
 
 async function doLogout(){token=null;currentUser=null;myProfile=null;goto('pg-login');}
