@@ -219,7 +219,24 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
 .notif-time{font-size:.7rem;color:var(--muted)}
 .notif-empty{padding:2rem;text-align:center;color:var(--muted);font-size:.82rem}
 
-/* MISC */
+/* COMMENTS */
+.comment-input-row{display:flex;gap:.75rem;align-items:flex-start}
+.comment-av{width:28px;height:28px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0;cursor:pointer}
+.comment-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+#comment-input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:.55rem .8rem;border-radius:5px;font-size:.85rem;font-family:'Lora',serif;outline:none;resize:vertical;transition:border .2s}
+#comment-input:focus{border-color:var(--muted)}
+#comment-input::placeholder{color:#3a3530;font-style:italic}
+.comment-item{display:flex;gap:.75rem;padding:.85rem 0;border-bottom:1px solid var(--border)}
+.comment-item:last-child{border-bottom:none}
+.comment-body{flex:1}
+.comment-meta{display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem;flex-wrap:wrap}
+.comment-author{font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;color:var(--text);cursor:pointer}
+.comment-author:hover{color:var(--accent)}
+.comment-username{font-family:'Inter',sans-serif;font-size:.72rem;color:var(--muted)}
+.comment-time{font-family:'Inter',sans-serif;font-size:.72rem;color:var(--muted)}
+.comment-del{background:transparent;border:none;color:var(--muted);font-size:.72rem;font-family:'Inter',sans-serif;cursor:pointer;margin-left:auto}
+.comment-del:hover{color:var(--danger)}
+.comment-text{font-size:.88rem;line-height:1.6;color:#d8d0c8;font-family:'Lora',serif}
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center}
 .modal-ov.on{display:flex}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1.75rem;max-width:360px;width:90%;font-family:'Inter',sans-serif}
@@ -340,9 +357,9 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
         <div class="profile-username" id="prof-username"></div>
         <div class="profile-bio" id="prof-bio"></div>
         <div class="profile-stats-row">
+          <span style="cursor:pointer" onclick="openFollowList('${currentProfileId}','followers')"><strong id="prof-followers-count">0</strong> followers</span>
+          <span style="cursor:pointer" onclick="openFollowList('${currentProfileId}','following')"><strong id="prof-following-count">0</strong> following</span>
           <span><strong id="prof-posts-count">0</strong> tulisan</span>
-          <span><strong id="prof-followers-count">0</strong> followers</span>
-          <span><strong id="prof-following-count">0</strong> following</span>
         </div>
         <div class="profile-actions" id="prof-actions"></div>
       </div>
@@ -382,6 +399,20 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
         <div style="font-family:'Inter',sans-serif;font-size:.75rem;color:var(--muted)" id="art-footer-bio"></div>
       </div>
       <button class="btn-follow" id="art-follow-btn" style="margin-left:auto" onclick="toggleFollowArt()"></button>
+    </div>
+    <!-- VIEW COUNT -->
+    <div style="margin-top:1.5rem;font-family:'Inter',sans-serif;font-size:.78rem;color:var(--muted)" id="art-view-count"></div>
+    <!-- COMMENTS -->
+    <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+      <div style="font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:1.25rem">Komentar</div>
+      <div class="comment-input-row">
+        <div class="comment-av" id="comment-my-av">🖊</div>
+        <div style="flex:1">
+          <textarea id="comment-input" placeholder="Tulis komentar..." rows="2"></textarea>
+          <button class="btn btn-p btn-sm" id="comment-submit-btn" onclick="submitComment()" style="margin-top:.5rem">Kirim</button>
+        </div>
+      </div>
+      <div id="art-comments" style="margin-top:1.5rem"></div>
     </div>
   </div>
 </div>
@@ -485,6 +516,15 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
           <button class="btn btn-p" onclick="savePf()">Simpan Profil</button>
         </div>
       </div>
+
+      <!-- VIEWERS SUB -->
+      <div class="subpage" id="sub-viewers">
+        <div style="margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between">
+          <div style="font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;color:var(--text)" id="viewers-title">Siapa yang melihat</div>
+          <button class="btn btn-g btn-sm" onclick="showSub('posts')">← Kembali</button>
+        </div>
+        <div id="viewers-list"><div class="loading">Memuat...</div></div>
+      </div>
     </div>
   </main>
 </div>
@@ -498,7 +538,16 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
   <div class="notif-list" id="notif-list"><div class="notif-empty">Belum ada notifikasi</div></div>
 </div>
 
-<!-- DELETE MODAL -->
+<!-- FOLLOW LIST MODAL -->
+<div class="modal-ov" id="follow-modal">
+  <div class="modal" style="max-width:420px;width:95%">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+      <h3 style="margin:0" id="follow-modal-title">Followers</h3>
+      <button class="btn btn-g btn-sm" onclick="$('follow-modal').classList.remove('on')">✕</button>
+    </div>
+    <div id="follow-modal-list" style="max-height:360px;overflow-y:auto"></div>
+  </div>
+</div>
 <div class="modal-ov" id="del-modal">
   <div class="modal">
     <h3>Hapus tulisan ini?</h3>
@@ -599,6 +648,7 @@ async function afterLogin(){
     myProfile=p2&&p2[0]?p2[0]:null;
   }
   updateNavAvatars();
+  updateCommentAv();
   $('s-email').textContent=myProfile?.username||currentUser.email;
   await loadFeed();
   goto('pg-home');
@@ -780,6 +830,7 @@ async function openArticle(postId, from='pg-home'){
   const profArr=await sbQ('profiles',`id=eq.${post.user_id}`);
   const prof=profArr&&profArr[0]?profArr[0]:{};
   currentArticleAuthorId=post.user_id;
+  currentArticlePostId=postId;
   // author row
   $('art-av').innerHTML=avHtml(prof.avatar_url,36);
   $('art-av2').innerHTML=avHtml(prof.avatar_url,36);
@@ -800,12 +851,106 @@ async function openArticle(postId, from='pg-home'){
     followBtn.textContent=isF&&isF.length?'Following':'Follow';
     followBtn.classList.toggle('following',!!(isF&&isF.length));
   } else {followBtn.style.display='none';}
+  // view count
+  await recordView(postId);
+  const viewCount=(post.views||0)+1;
+  $('art-view-count').textContent=`👁 ${viewCount} kali dilihat`;
+  // load comments
+  loadComments(postId);
 }
 async function toggleFollowArt(){
   if(currentArticleAuthorId)await toggleFollow(currentArticleAuthorId);
 }
 
-// ── NOTIFICATIONS ──
+let currentArticlePostId=null;
+
+// ── VIEW TRACKING ──
+async function recordView(postId){
+  if(!postId)return;
+  // increment view count
+  const posts=await sbQ('posts',`id=eq.${postId}`);
+  const post=posts&&posts[0];if(!post)return;
+  await sbUp('posts',`id=eq.${postId}`,{views:(post.views||0)+1});
+  // record who viewed (only if logged in)
+  if(!currentUser)return;
+  const existing=await sbQ('post_views',`post_id=eq.${postId}&user_id=eq.${currentUser.id}`);
+  if(!existing||!existing.length){
+    await sbIns('post_views',{id:uid(),post_id:postId,user_id:currentUser.id,viewed_at:Date.now()});
+  }
+}
+
+// ── COMMENTS ──
+async function loadComments(postId){
+  const comments=await sbQ('comments',`post_id=eq.${postId}&order=created_at.asc`);
+  const el=$('art-comments');
+  if(!comments||!comments.length){
+    el.innerHTML='<div style="color:var(--muted);font-family:Inter,sans-serif;font-size:.82rem;padding:1rem 0">Belum ada komentar. Jadilah yang pertama!</div>';
+    return;
+  }
+  const uids=[...new Set(comments.map(c=>c.user_id))];
+  const profs=await sbQ('profiles',`id=in.(${uids.join(',')})`);
+  const pm={};profs.forEach(p=>pm[p.id]=p);
+  el.innerHTML=comments.map(c=>{
+    const p=pm[c.user_id]||{};
+    const isOwn=currentUser&&c.user_id===currentUser.id;
+    return `<div class="comment-item" id="cmt-${c.id}">
+      <div class="comment-av" onclick="openProfile('${c.user_id}')">${avHtml(p.avatar_url,28)}</div>
+      <div class="comment-body">
+        <div class="comment-meta">
+          <span class="comment-author" onclick="openProfile('${c.user_id}')">${p.name||'Anonim'}</span>
+          <span class="comment-username">@${p.username||'?'}</span>
+          <span class="comment-time">${fmtTimeAgo(c.created_at)}</span>
+          ${isOwn?`<button class="comment-del" onclick="deleteComment('${c.id}','${postId}')">Hapus</button>`:''}
+        </div>
+        <div class="comment-text">${c.content}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function submitComment(){
+  if(!currentUser){toast('Login dulu untuk komentar!');return;}
+  const input=$('comment-input');
+  const content=input.value.trim();
+  if(!content)return;
+  const btn=$('comment-submit-btn');
+  btn.disabled=true;
+  const postId=currentArticlePostId;
+  await sbIns('comments',{id:uid(),post_id:postId,user_id:currentUser.id,content,created_at:Date.now()});
+  input.value='';
+  await loadComments(postId);
+  // notif ke penulis artikel
+  if(currentArticleAuthorId&&currentArticleAuthorId!==currentUser.id){
+    await sbIns('notifications',{id:uid(),user_id:currentArticleAuthorId,from_user_id:currentUser.id,post_id:postId,type:'comment',read:false,created_at:Date.now()});
+  }
+  btn.disabled=false;
+  toast('Komentar terkirim!');
+}
+
+async function deleteComment(commentId,postId){
+  await sbDel('comments',`id=eq.${commentId}&user_id=eq.${currentUser.id}`);
+  loadComments(postId);
+  toast('Komentar dihapus');
+}
+
+// ── VIEWERS (dashboard) ──
+async function loadViewers(postId){
+  const views=await sbQ('post_views',`post_id=eq.${postId}&order=viewed_at.desc&limit=50`);
+  if(!views||!views.length){$('viewers-list').innerHTML='<div style="color:var(--muted);font-family:Inter,sans-serif;font-size:.82rem">Belum ada yang melihat.</div>';return;}
+  const uids=[...new Set(views.map(v=>v.user_id))];
+  const profs=await sbQ('profiles',`id=in.(${uids.join(',')})`);
+  const pm={};profs.forEach(p=>pm[p.id]=p);
+  $('viewers-list').innerHTML=views.map(v=>{
+    const p=pm[v.user_id]||{};
+    return `<div class="user-row" style="padding:.6rem 0">
+      <div class="user-row-av" onclick="openProfile('${v.user_id}')" style="width:32px;height:32px">${avHtml(p.avatar_url,32)}</div>
+      <div class="user-row-info" onclick="openProfile('${v.user_id}')">
+        <div class="user-row-name" style="font-size:.82rem">${p.name||'Anonim'}</div>
+        <div class="user-row-username">@${p.username||'?'} · ${fmtTimeAgo(v.viewed_at)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
 async function loadNotifications(){
   if(!currentUser)return;
   const notifs=await sbQ('notifications',`user_id=eq.${currentUser.id}&order=created_at.desc&limit=20`);
@@ -822,6 +967,7 @@ async function loadNotifications(){
     let text='';
     if(n.type==='follow')text=`<strong>${from.name||'Seseorang'}</strong> mulai mengikutimu`;
     if(n.type==='new_post')text=`<strong>${from.name||'Seseorang'}</strong> memposting tulisan baru`;
+    if(n.type==='comment')text=`<strong>${from.name||'Seseorang'}</strong> mengomentari tulisanmu`;
     return `<div class="notif-item${n.read?'':' unread'}" onclick="handleNotifClick('${n.id}','${n.type}','${n.from_user_id||''}','${n.post_id||''}')">
       <div class="notif-text">${text}</div>
       <div class="notif-time">${fmtTimeAgo(n.created_at)}</div>
@@ -860,6 +1006,19 @@ function showSub(name){
   if(name==='dashboard')renderDash();
   if(name==='posts'){loadMyPosts().then(renderTbl);}
   if(name==='profile')loadPfEditor();
+  if(name==='viewers'){}// loaded via openViewers
+}
+
+function openViewers(postId, title){
+  $('viewers-title').textContent=`👁 Siapa yang melihat "${title}"`;
+  showSub('viewers');
+  loadViewers(postId);
+}
+
+// update comment avatar when logged in
+function updateCommentAv(){
+  const el=$('comment-my-av');
+  if(el)el.innerHTML=myProfile?.avatar_url?`<img src="${myProfile.avatar_url}" onerror="this.parentElement.textContent='🖊'">`:'🖊';
 }
 
 async function loadMyPosts(){
@@ -893,7 +1052,7 @@ function renderTbl(){
     if(q&&!(p.title||'').toLowerCase().includes(q))return false;
     return true;
   });
-  $('tbl-body').innerHTML=filtered.length?filtered.map(p=>`<div class="tbl-row"><div class="tbl-name" onclick="editPost('${p.id}')">${p.title||'<em style="opacity:.4">Tanpa judul</em>'}</div><div class="tbl-cell"><span class="pill ${p.status==='published'?'pill-p':'pill-d'}">${p.status==='published'?'Published':'Draft'}</span></div><div class="tbl-cell">${fmtDate(p.updated_at)}</div><div class="tbl-acts"><button class="btn btn-g btn-sm" onclick="editPost('${p.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="askDel('${p.id}')">Hapus</button></div></div>`).join(''):'<div class="loading">Tidak ada tulisan.</div>';
+  $('tbl-body').innerHTML=filtered.length?filtered.map(p=>`<div class="tbl-row"><div class="tbl-name" onclick="editPost('${p.id}')">${p.title||'<em style="opacity:.4">Tanpa judul</em>'}</div><div class="tbl-cell"><span class="pill ${p.status==='published'?'pill-p':'pill-d'}">${p.status==='published'?'Published':'Draft'}</span>${p.views?` <span style="font-size:.68rem;color:var(--muted)">👁${p.views}</span>`:''}</div><div class="tbl-cell">${fmtDate(p.updated_at)}</div><div class="tbl-acts"><button class="btn btn-g btn-sm" onclick="editPost('${p.id}')">Edit</button>${p.status==='published'?`<button class="btn btn-g btn-sm" onclick="openViewers('${p.id}','${(p.title||'').replace(/'/g,'')}')" title="Lihat siapa yang melihat">👁</button>`:''}  <button class="btn btn-d btn-sm" onclick="askDel('${p.id}')">Hapus</button></div></div>`).join(''):'<div class="loading">Tidak ada tulisan.</div>';
 }
 function setF(f){activeF=f;renderTbl();}
 function editPost(id){curPostId=id;showSub('editor');openEd();}
