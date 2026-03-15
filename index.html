@@ -739,7 +739,7 @@ async function doRegister(){
     const ld=await lr.json();
     if(ld.access_token){
       token=ld.access_token;currentUser=ld.user;
-      await sbIns('profiles',{id:currentUser.id,username,name,bio:'',avatar_url:'',created_at:Date.now()},true);
+      await sbIns('profiles',{id:currentUser.id,username,name,bio:'',avatar_url:'',email,created_at:Date.now()},true);
       err.style.display='none';
       await afterLogin();
     }
