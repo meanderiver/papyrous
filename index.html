@@ -367,7 +367,12 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
       <div class="profile-top">
         <div class="profile-av-lg" id="prof-av">🖊</div>
         <div class="profile-info-right">
-          <h1 id="prof-name"></h1>
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <h1 id="prof-name"></h1>
+            <button id="prof-edit-btn" style="display:none;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:.3rem .6rem;cursor:pointer;transition:all .2s" onclick="openEditProfileModal()" title="Edit Profil">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+          </div>
           <div class="profile-username" id="prof-username"></div>
           <div class="profile-bio" id="prof-bio"></div>
           <div class="profile-stats-row">
@@ -444,8 +449,8 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
       <button class="s-item" id="si-viewers" onclick="showSub('viewers')">
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Viewers
       </button>
-      <button class="s-item" id="si-profile" onclick="showSub('profile')">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Edit Profil
+      <button class="s-item" onclick="gotoMyProfile()">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profil Saya
       </button>
       <button class="s-item" onclick="doLogout()" style="color:var(--danger);margin-top:auto">
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Keluar
@@ -599,7 +604,36 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
   </div>
 </div>
 
-<!-- DELETE MODAL -->
+<!-- EDIT PROFILE MODAL -->
+<div class="modal-ov" id="edit-profile-modal">
+  <div class="modal" style="max-width:460px;width:95%">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-shrink:0">
+      <h3 style="margin:0">Edit Profil</h3>
+      <button class="btn btn-g btn-sm" onclick="$('edit-profile-modal').classList.remove('on')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="av-upload-row" style="margin-bottom:1.25rem">
+        <div class="av-prev" id="modal-av-prev" onclick="$('modal-av-input').click()" style="width:72px;height:72px;font-size:2rem">
+          🖊
+          <div class="av-prev-overlay">Ganti foto</div>
+        </div>
+        <div style="flex:1;font-family:'Inter',sans-serif;font-size:.78rem;color:var(--muted);line-height:1.6">
+          Klik foto untuk upload<br>
+          <span style="font-size:.7rem">JPG, PNG, max 2MB</span>
+          <div id="modal-upload-status" style="font-size:.72rem;margin-top:.25rem"></div>
+        </div>
+      </div>
+      <input type="file" id="modal-av-input" accept="image/*" style="display:none" onchange="handleModalAvatarUpload(event)">
+      <div class="ff"><label>Nama</label><input type="text" id="modal-pf-name"></div>
+      <div class="ff"><label>Username</label><input type="text" id="modal-pf-username"></div>
+      <div class="ff"><label>Bio</label><textarea id="modal-pf-bio" style="min-height:80px" placeholder="Ceritakan tentang dirimu..."></textarea></div>
+    </div>
+    <div class="modal-acts" style="margin-top:1.25rem">
+      <button class="btn btn-g btn-sm" onclick="$('edit-profile-modal').classList.remove('on')">Batal</button>
+      <button class="btn btn-p btn-sm" onclick="saveProfileModal()">Simpan</button>
+    </div>
+  </div>
+</div>
 <div class="modal-ov" id="del-modal">
   <div class="modal">
     <h3>Hapus tulisan ini?</h3>
@@ -910,10 +944,14 @@ async function openProfile(userId){
   $('prof-fc').textContent=fArr?.length||0;
   $('prof-fgc').textContent=fgArr?.length||0;
   $('prof-pc').textContent=postsArr?.length||0;
+  // tampilkan icon edit kalau profil sendiri
+  const editBtn=$('prof-edit-btn');
+  if(editBtn)editBtn.style.display=currentUser&&userId===currentUser.id?'inline-flex':'none';
+
   // actions
   const acts=$('prof-actions');
   if(currentUser&&userId===currentUser.id){
-    acts.innerHTML=`<button class="btn btn-g btn-sm" onclick="goto('pg-dashboard');showSub('profile')">Edit Profil</button><button class="btn btn-p btn-sm" onclick="goto('pg-dashboard')">Dashboard</button>`;
+    acts.innerHTML=`<button class="btn btn-p btn-sm" onclick="goto('pg-dashboard')">Dashboard</button>`;
   } else if(currentUser){
     const isF=await sbQ('follows',`follower_id=eq.${currentUser.id}&following_id=eq.${userId}`);
     const following=isF?.length>0;
@@ -1226,8 +1264,58 @@ async function loadViewersDetail(postId,title){
   }).join('');
 }
 
-// ── PROFILE EDITOR ──
-function loadPfEditor(){
+function openEditProfileModal(){
+  if(!myProfile)return;
+  $('modal-pf-name').value=myProfile.name||'';
+  $('modal-pf-username').value=myProfile.username||'';
+  $('modal-pf-bio').value=myProfile.bio||'';
+  $('modal-upload-status').textContent='';
+  const prev=$('modal-av-prev');
+  prev.innerHTML=myProfile.avatar_url
+    ?`<img src="${myProfile.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"><div class="av-prev-overlay">Ganti foto</div>`
+    :'🖊<div class="av-prev-overlay">Upload foto</div>';
+  $('edit-profile-modal').classList.add('on');
+}
+
+async function handleModalAvatarUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  if(file.size>2*1024*1024){toast('Max 2MB');return;}
+  $('modal-upload-status').textContent='Mengupload...';
+  const ext=file.name.split('.').pop();
+  const path=`${currentUser.id}/avatar.${ext}`;
+  const r=await fetch(`${SB}/storage/v1/object/avatars/${path}`,{
+    method:'POST',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+token,'Content-Type':file.type,'x-upsert':'true'},
+    body:file
+  });
+  if(r.ok){
+    const url=`${SB}/storage/v1/object/public/avatars/${path}?t=${Date.now()}`;
+    $('modal-av-prev').innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"><div class="av-prev-overlay">Ganti foto</div>`;
+    myProfile={...myProfile,avatar_url:url};
+    updateNavAvatars();
+    await sbUp('profiles',`id=eq.${currentUser.id}`,{avatar_url:url});
+    $('modal-upload-status').textContent='✓ Foto diperbarui';
+  } else {
+    $('modal-upload-status').textContent='Gagal upload';
+  }
+}
+
+async function saveProfileModal(){
+  if(!currentUser)return;
+  const name=$('modal-pf-name').value.trim();
+  const username=$('modal-pf-username').value.trim().toLowerCase().replace(/\s+/g,'');
+  const bio=$('modal-pf-bio').value.trim();
+  if(!username){toast('Username tidak boleh kosong');return;}
+  const ex=await sbQ('profiles',`username=eq.${username}&id=neq.${currentUser.id}`);
+  if(ex?.length){toast('Username sudah dipakai');return;}
+  await sbUp('profiles',`id=eq.${currentUser.id}`,{name,username,bio});
+  myProfile={...myProfile,name,username,bio};
+  updateNavAvatars();
+  $('edit-profile-modal').classList.remove('on');
+  toast('Profil tersimpan ✓');
+  // refresh halaman profil kalau sedang di sana
+  if(document.querySelector('#pg-profile.on'))openProfile(currentUser.id);
+}
   if(!myProfile)return;
   $('pf-name').value=myProfile.name||'';
   $('pf-username').value=myProfile.username||'';
