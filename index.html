@@ -1198,31 +1198,37 @@ async function saveDraft(){await syncSave('draft');setBadge('draft');toast('Draf
 async function pubPost(){
   const p=syncLocal('published');if(!p)return;
   await sbIns('posts',{id:p.id,user_id:p.user_id||currentUser?.id,title:p.title,content:p.content,tags:p.tags,status:'published',created_at:p.created_at,updated_at:p.updated_at},true);
-  setBadge('published');$('e-saved').textContent='Dipublish '+new Date().toLocaleTimeString('id-ID');
-  // notif ke semua followers
-  try{
-    const followers=await sbQ('follows',`following_id=eq.${currentUser.id}`);
-    if(followers&&followers.length){
-      for(const f of followers){
-        await fetch(`${SB}/rest/v1/notifications`,{
-          method:'POST',
-          headers:{...hdr(),'Prefer':'return=minimal'},
-          body:JSON.stringify({
-            id:uid(),
-            user_id:f.follower_id,
-            from_user_id:currentUser.id,
-            post_id:p.id,
-            type:'new_post',
-            read:false,
-            created_at:Date.now()
-          })
-        });
-      }
-      toast(`Tulisan dipublish ✓ — ${followers.length} follower dinotifikasi`);
-    } else {
-      toast('Tulisan dipublish ✓');
+  setBadge('published');
+  $('e-saved').textContent='Dipublish '+new Date().toLocaleTimeString('id-ID');
+  // ambil followers
+  const followers=await sbQ('follows',`following_id=eq.${currentUser.id}`);
+  console.log('followers:', followers);
+  if(followers&&followers.length){
+    for(const f of followers){
+      const notifData={
+        id:uid(),
+        user_id:f.follower_id,
+        from_user_id:currentUser.id,
+        post_id:p.id,
+        type:'new_post',
+        read:false,
+        created_at:Date.now()
+      };
+      console.log('inserting notif:', notifData);
+      const result=await fetch(`${SB}/rest/v1/notifications`,{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'apikey':KEY,
+          'Authorization':'Bearer '+KEY,
+          'Prefer':'return=minimal'
+        },
+        body:JSON.stringify(notifData)
+      });
+      console.log('notif insert status:', result.status);
     }
-  } catch(e){
+    toast(`Dipublish ✓ — ${followers.length} follower dinotifikasi`);
+  } else {
     toast('Tulisan dipublish ✓');
   }
 }
