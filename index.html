@@ -150,14 +150,14 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
 .comment-text{font-size:.85rem;line-height:1.6;color:#d8d0c8}
 
 /* DASHBOARD SIDEBAR */
-.sidebar{width:210px;background:var(--surface);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;z-index:50;display:grid;grid-template-rows:auto 1fr auto}
-.sidebar-logo{padding:padding:.75rem 1.1rem .6rem;font-style:italic;font-size:1.15rem;color:var(--accent);border-bottom:1px solid var(--border);cursor:pointer}
+.sidebar{width:210px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:50}
+.sidebar-logo{padding:1.25rem 1.1rem .85rem;font-style:italic;font-size:1.15rem;color:var(--accent);border-bottom:1px solid var(--border);cursor:pointer}
 .sidebar-logo small{display:block;font-style:normal;font-size:.67rem;color:var(--muted);font-family:'Inter',sans-serif;margin-top:.1rem}
-.sidebar-nav{padding:.6rem .5rem;display:flex;flex-direction:column;gap:.12rem;overflow-y:scroll;height:calc(100vh - 180px)}
-.s-item{display:flex;align-items:center;gap:.6rem;padding:.4rem .7rem;border-radius:5px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.8rem;color:var(--muted);transition:all .2s;border:none;background:transparent;width:100%;text-align:left}
+.sidebar-nav{flex:1;padding:.6rem .5rem;display:flex;flex-direction:column;gap:.12rem}
+.s-item{display:flex;align-items:center;gap:.6rem;padding:.55rem .7rem;border-radius:5px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.8rem;color:var(--muted);transition:all .2s;border:none;background:transparent;width:100%;text-align:left}
 .s-item:hover{background:var(--surface2);color:var(--text)}
 .s-item.on{background:var(--warm);color:var(--accent)}
-.sidebar-foot{padding:.6rem .7rem;border-top:1px solid var(--border);background:var(--surface)}
+.sidebar-foot{padding:.85rem .7rem;border-top:1px solid var(--border)}
 .s-user{font-family:'Inter',sans-serif;font-size:.72rem;color:var(--muted);margin-bottom:.55rem;word-break:break-all}
 .btn-logout{width:100%;padding:.42rem;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:4px;font-size:.73rem;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s}
 .btn-logout:hover{border-color:var(--danger);color:var(--danger)}
@@ -447,11 +447,10 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
       <button class="s-item" id="si-profile" onclick="showSub('profile')">
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Edit Profil
       </button>
+      <button class="s-item" onclick="doLogout()" style="color:var(--danger);margin-top:auto">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Keluar
+      </button>
     </nav>
-    <div class="sidebar-foot">
-      <div class="s-user" id="s-email"></div>
-      <button class="btn-logout" onclick="doLogout()">Keluar</button>
-    </div>
   </aside>
   <main class="admin-main">
     <div class="admin-topbar"><h2 id="a-title">Dashboard</h2></div>
