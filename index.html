@@ -635,7 +635,18 @@ function gotoFeed(){goto('pg-home');loadFeed();}
 // ── SUPABASE ──
 function hdr(){return{'Content-Type':'application/json','apikey':KEY,'Authorization':'Bearer '+(token||KEY)};}
 async function sbQ(tbl,q=''){try{const r=await fetch(`${SB}/rest/v1/${tbl}?${q}`,{headers:hdr()});return r.ok?r.json():[];}catch{return[];}}
-async function sbIns(tbl,data,upsert=false){try{const r=await fetch(`${SB}/rest/v1/${tbl}`,{method:'POST',headers:{...hdr(),Prefer:upsert?'resolution=merge-duplicates':'return=representation'},body:JSON.stringify(data)});return r.ok?r.json():null;}catch{return null;}}
+async function sbIns(tbl,data,upsert=false){
+  try{
+    const r=await fetch(`${SB}/rest/v1/${tbl}`,{
+      method:'POST',
+      headers:{...hdr(),Prefer:upsert?'resolution=merge-duplicates':'return=minimal'},
+      body:JSON.stringify(data)
+    });
+    if(!r.ok){const t=await r.text();console.error('sbIns error:',tbl,r.status,t);return null;}
+    const txt=await r.text();
+    return txt?JSON.parse(txt):true;
+  }catch(e){console.error('sbIns catch:',e);return null;}
+}
 async function sbUp(tbl,q,data){try{const r=await fetch(`${SB}/rest/v1/${tbl}?${q}`,{method:'PATCH',headers:{...hdr(),Prefer:'return=representation'},body:JSON.stringify(data)});return r.ok?r.json():null;}catch{return null;}}
 async function sbDel(tbl,q){try{const r=await fetch(`${SB}/rest/v1/${tbl}?${q}`,{method:'DELETE',headers:hdr()});return r.ok;}catch{return false;}}
 
