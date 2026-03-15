@@ -1316,16 +1316,6 @@ async function saveProfileModal(){
   // refresh halaman profil kalau sedang di sana
   if(document.querySelector('#pg-profile.on'))openProfile(currentUser.id);
 }
-  if(!myProfile)return;
-  $('pf-name').value=myProfile.name||'';
-  $('pf-username').value=myProfile.username||'';
-  $('pf-bio').value=myProfile.bio||'';
-  $('pf-upload-status').textContent='';
-  const prev=$('av-prev');
-  prev.innerHTML=myProfile.avatar_url
-    ?`<img src="${myProfile.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"><div class="av-prev-overlay">Ganti foto</div>`
-    :'🖊<div class="av-prev-overlay">Upload foto</div>';
-}
 async function savePf(){
   if(!currentUser)return;
   const name=$('pf-name').value.trim();
