@@ -608,7 +608,51 @@ let currentTab='explore';
 const $=id=>document.getElementById(id);
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 
-// ── PAGE ──
+const EDGE_FN='https://oqndgjpwcdspodofedho.supabase.co/functions/v1/Send-Notification';
+
+async function sendEmailNotif(to, subject, html){
+  try{
+    await fetch(EDGE_FN,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+KEY},
+      body:JSON.stringify({to,subject,html})
+    });
+  }catch(e){console.error('email notif error:',e);}
+}
+
+function emailNewPost(toEmail, fromName, postTitle, postId){
+  const url=`https://meanderiver.github.io/papyrous`;
+  return {
+    subject:`✦ ${fromName} baru saja memposting tulisan baru di Papyrous`,
+    html:`
+      <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;background:#0c0b0a;color:#ede8e0;padding:2rem;border-radius:8px">
+        <div style="font-size:1.4rem;font-style:italic;color:#e8e0d0;margin-bottom:1.5rem">✦ Papyrous</div>
+        <p style="font-size:1rem;line-height:1.7;color:#ede8e0">
+          <strong style="color:#e8e0d0">${fromName}</strong> baru saja mempublikasikan tulisan baru:
+        </p>
+        <div style="background:#1a1814;border:1px solid #2c2820;border-radius:4px;padding:1.25rem;margin:1.25rem 0">
+          <div style="font-size:1.1rem;font-weight:600;font-style:italic;color:#e8e0d0">${postTitle}</div>
+        </div>
+        <a href="${url}" style="display:inline-block;background:#e8e0d0;color:#0c0b0a;padding:.65rem 1.5rem;border-radius:4px;text-decoration:none;font-family:Inter,sans-serif;font-size:.88rem;font-weight:600;margin-top:.5rem">Baca Sekarang →</a>
+        <p style="font-family:Inter,sans-serif;font-size:.75rem;color:#7a7268;margin-top:2rem">Kamu menerima email ini karena mengikuti ${fromName} di Papyrous.</p>
+      </div>`
+  };
+}
+
+function emailNewFollow(toEmail, fromName){
+  return {
+    subject:`✦ ${fromName} mulai mengikutimu di Papyrous`,
+    html:`
+      <div style="font-family:Georgia,serif;max-width:560px;margin:0 auto;background:#0c0b0a;color:#ede8e0;padding:2rem;border-radius:8px">
+        <div style="font-size:1.4rem;font-style:italic;color:#e8e0d0;margin-bottom:1.5rem">✦ Papyrous</div>
+        <p style="font-size:1rem;line-height:1.7;color:#ede8e0">
+          <strong style="color:#e8e0d0">${fromName}</strong> mulai mengikutimu di Papyrous!
+        </p>
+        <a href="https://meanderiver.github.io/papyrous" style="display:inline-block;background:#e8e0d0;color:#0c0b0a;padding:.65rem 1.5rem;border-radius:4px;text-decoration:none;font-family:Inter,sans-serif;font-size:.88rem;font-weight:600;margin-top:1rem">Buka Papyrous →</a>
+        <p style="font-family:Inter,sans-serif;font-size:.75rem;color:#7a7268;margin-top:2rem">Kamu menerima email ini karena terdaftar di Papyrous.</p>
+      </div>`
+  };
+}
 function goto(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   $(id).classList.add('on');
@@ -1211,32 +1255,25 @@ async function pubPost(){
   await sbIns('posts',{id:p.id,user_id:p.user_id||currentUser?.id,title:p.title,content:p.content,tags:p.tags,status:'published',created_at:p.created_at,updated_at:p.updated_at},true);
   setBadge('published');
   $('e-saved').textContent='Dipublish '+new Date().toLocaleTimeString('id-ID');
-  // ambil followers
   const followers=await sbQ('follows',`following_id=eq.${currentUser.id}`);
-  console.log('followers:', followers);
   if(followers&&followers.length){
+    // ambil profil penulis
+    const myProfArr=await sbQ('profiles',`id=eq.${currentUser.id}`);
+    const myProf=myProfArr?.[0]||myProfile;
     for(const f of followers){
-      const notifData={
-        id:uid(),
-        user_id:f.follower_id,
-        from_user_id:currentUser.id,
-        post_id:p.id,
-        type:'new_post',
-        read:false,
-        created_at:Date.now()
-      };
-      console.log('inserting notif:', notifData);
-      const result=await fetch(`${SB}/rest/v1/notifications`,{
+      // insert notif in-app
+      await fetch(`${SB}/rest/v1/notifications`,{
         method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'apikey':KEY,
-          'Authorization':'Bearer '+KEY,
-          'Prefer':'return=minimal'
-        },
-        body:JSON.stringify(notifData)
+        headers:{'Content-Type':'application/json','apikey':KEY,'Authorization':'Bearer '+KEY,'Prefer':'return=minimal'},
+        body:JSON.stringify({id:uid(),user_id:f.follower_id,from_user_id:currentUser.id,post_id:p.id,type:'new_post',read:false,created_at:Date.now()})
       });
-      console.log('notif insert status:', result.status);
+      // kirim email
+      const followerProf=await sbQ('profiles',`id=eq.${f.follower_id}`);
+      const followerEmail=followerProf?.[0]?.email;
+      // ambil email dari auth
+      const {subject,html}=emailNewPost(null,myProf.name||'Seseorang',p.title||'Tanpa Judul',p.id);
+      // kirim via edge function — email diambil dari user_id
+      await sendEmailNotif(null,subject,html,f.follower_id);
     }
     toast(`Dipublish ✓ — ${followers.length} follower dinotifikasi`);
   } else {
