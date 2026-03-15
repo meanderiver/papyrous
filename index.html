@@ -522,8 +522,7 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
             <button class="tb" onclick="insLink()">↗</button>
             <button class="tb" onclick="insCode()" style="font-size:.68rem">&lt;/&gt;</button>
             <button class="tb" onclick="insDivider()" title="Divider" style="font-size:.9rem">—</button>
-            <button class="tb" onclick="triggerInsertImage()" title="Insert image" style="font-size:.85rem">🖼</button>
-            <input type="file" id="ins-img-input" accept="image/*" style="display:none">
+            <button class="tb" title="Insert image" style="font-size:.85rem" onclick="(function(){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=async function(e){const f=e.target.files[0];if(!f)return;if(f.size>5*1024*1024){alert('Max 5MB');return;}toast('Mengupload...');const ext=f.name.split('.').pop();const path='images/'+currentUser.id+'/'+uid()+'.'+ext;const r=await fetch(SB+'/storage/v1/object/avatars/'+path,{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+token,'Content-Type':f.type,'x-upsert':'true'},body:f});if(r.ok){const url=SB+'/storage/v1/object/public/avatars/'+path;document.execCommand('insertHTML',false,'<figure style=&quot;margin:1.5rem 0;text-align:center&quot;><img src=&quot;'+url+'&quot; style=&quot;max-width:100%;border-radius:6px&quot;></figure><p><br></p>');toast('Gambar diupload ✓');}else{toast('Gagal upload');}};i.click();})()">🖼</button>
           </div>
           <div id="editor" contenteditable="true" data-placeholder="Mulai bercerita..."></div>
           <div class="ed-foot"><span id="wc">0 kata</span><span id="e-readtime"></span></div>
