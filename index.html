@@ -1,4 +1,25 @@
-<!DOCTYPE html>
+<div class="subpage" id="sub-editor">
+        <div class="ed-wrap">
+          <div class="ed-top">
+            <div style="display:flex;align-items:center;gap:.65rem">
+              <button class="btn btn-g btn-sm" onclick="showSub('posts')">← Kembali</button>
+              <span id="e-badge" class="s-badge s-draft">Draft</span>
+            </div>
+            <div class="ed-acts">
+              <span id="e-saved" style="font-family:'Inter',sans-serif;font-size:.72rem;color:var(--muted)"></span>
+              <button class="btn btn-g btn-sm" onclick="saveDraft()">Simpan</button>
+              <button class="btn btn-p btn-sm" onclick="pubPost()">Publish</button>
+            </div>
+          </div>
+          <!-- COVER IMAGE -->
+          <div class="cover-upload" id="cover-upload" onclick="$('cover-file-input').click()">
+            <button class="cover-remove" id="cover-remove" onclick="event.stopPropagation();removeCover()">✕</button>
+            <div class="cover-upload-overlay">📷 Ganti cover</div>
+            <span id="cover-placeholder">📷 Tambah cover image (klik untuk upload)</span>
+          </div>
+          <input type="file" id="cover-file-input" accept="image/*" style="display:none" onchange="handleCoverUpload(event)">
+          <input type="text" id="edit-title" placeholder="Judul ceritamu...">
+          <div class="tag-row"><label>Tag:</label><input type="text" id="edit-tags" placeholder="esai, cerita (pisah<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -212,7 +233,15 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
 .ff input:focus,.ff textarea:focus{border-color:var(--muted)}
 .ff textarea{resize:vertical;min-height:72px}
 
-/* EDITOR */
+/* COVER IMAGE */
+.cover-upload{border:2px dashed var(--border);border-radius:6px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:1.25rem;font-family:'Inter',sans-serif;font-size:.82rem;color:var(--muted);position:relative;overflow:hidden}
+.cover-upload:hover{border-color:var(--muted);color:var(--text)}
+.cover-upload.has-cover{border:none;padding:0;height:220px}
+.cover-upload.has-cover img{width:100%;height:100%;object-fit:cover;border-radius:6px}
+.cover-upload-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;border-radius:6px;font-family:'Inter',sans-serif;font-size:.82rem;color:#fff;gap:.5rem}
+.cover-upload.has-cover:hover .cover-upload-overlay{opacity:1}
+.cover-remove{position:absolute;top:.5rem;right:.5rem;background:rgba(0,0,0,.7);border:none;color:#fff;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:.75rem;display:none;align-items:center;justify-content:center;z-index:2}
+.cover-upload.has-cover:hover .cover-remove{display:flex}
 .ed-wrap{max-width:680px}
 .ed-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.65rem}
 .ed-acts{display:flex;gap:.45rem;align-items:center}
