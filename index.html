@@ -153,7 +153,7 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
 .sidebar{width:210px;background:var(--surface);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;z-index:50;display:grid;grid-template-rows:auto 1fr auto}
 .sidebar-logo{padding:padding:.75rem 1.1rem .6rem;font-style:italic;font-size:1.15rem;color:var(--accent);border-bottom:1px solid var(--border);cursor:pointer}
 .sidebar-logo small{display:block;font-style:normal;font-size:.67rem;color:var(--muted);font-family:'Inter',sans-serif;margin-top:.1rem}
-.sidebar-nav{padding:.6rem .5rem;display:flex;flex-direction:column;gap:.12rem;overflow-y:auto;max-height:calc(100vh - 120px)}
+.sidebar-nav{padding:.6rem .5rem;display:flex;flex-direction:column;gap:.12rem;overflow-y:scroll;height:calc(100vh - 180px)}
 .s-item{display:flex;align-items:center;gap:.6rem;padding:.4rem .7rem;border-radius:5px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.8rem;color:var(--muted);transition:all .2s;border:none;background:transparent;width:100%;text-align:left}
 .s-item:hover{background:var(--surface2);color:var(--text)}
 .s-item.on{background:var(--warm);color:var(--accent)}
