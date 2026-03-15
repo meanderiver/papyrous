@@ -521,7 +521,8 @@ body{background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;min
             <button class="tb" onclick="insLink()">↗</button>
             <button class="tb" onclick="insCode()" style="font-size:.68rem">&lt;/&gt;</button>
             <button class="tb" onclick="insDivider()" title="Divider" style="font-size:.9rem">—</button>
-            <button class="tb" onclick="insImage()" title="Insert image" style="font-size:.85rem">🖼</button>
+            <button class="tb" onclick="$('ins-img-input').click()" title="Insert image" style="font-size:.85rem">🖼</button>
+            <input type="file" id="ins-img-input" accept="image/*" style="display:none" onchange="handleInsertImage(event)">
           </div>
           <div id="editor" contenteditable="true" data-placeholder="Mulai bercerita..."></div>
           <div class="ed-foot"><span id="wc">0 kata</span><span id="e-readtime"></span></div>
